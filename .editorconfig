@@ -1,0 +1,48 @@
+root = true
+
+### Core EditorConfig Options ###
+
+## All files ##
+[*.*]
+
+# Indentation and spacing
+indent_style = space
+trim_trailing_whitespace = true
+
+## C# files ##
+[*.cs]
+
+# Encoding
+charset = utf-8-bom
+
+# Indentation and spacing
+indent_size = 4
+tab_width = 4
+
+# New line preferences
+end_of_line = crlf
+insert_final_newline = true
+
+## Project and JSON files ##
+[*.{csproj,json}]
+
+# Encoding
+charset = utf-8-bom
+
+# Indentation and spacing
+indent_size = 2
+tab_width = 2
+
+# New line preferences
+end_of_line = crlf
+insert_final_newline = false
+
+### .NET Coding Conventions ###
+[*.cs]
+
+# Organize usings
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+# Namespace options
+dotnet_style_namespace_match_folder = true
