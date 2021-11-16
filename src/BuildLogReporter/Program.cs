@@ -1,11 +1,13 @@
 ﻿
 namespace BuildLogReporter
 {
-    public class Program
+    public static class Program
     {
-        public static void Main()
+        public static Task<int> Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            var executor = new ProgramExecutor();
+
+            return executor.ProcessFileAsync(args);
         }
     }
 }
