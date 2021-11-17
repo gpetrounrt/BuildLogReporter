@@ -7,6 +7,23 @@ namespace BuildLogReporter.UnitTests
     public sealed class ProgramExecutorTests
     {
         [Fact]
+        public async Task ProcessFileAsync_WhenHavingNoArguments_ShouldReturnOneAndDisplayExpectedOutput()
+        {
+            // Arrange
+            var mockFileSystem = new MockFileSystem();
+            var programExecutor = new ProgramExecutor(mockFileSystem);
+            using var consoleRecorder = new ConsoleRecorder();
+
+            // Act
+            var result = await programExecutor.ProcessFileAsync(Array.Empty<string>());
+
+            // Assert
+            result.Should().Be(1);
+            consoleRecorder.GetOutput().Should().MatchRegex(@"Build Log Reporter \d+.\d+.\d+");
+            consoleRecorder.GetError().Should().StartWith("Required argument missing for command");
+        }
+
+        [Fact]
         public async Task ProcessFileAsync_WhenHavingEmptyLogPath_ShouldReturnOneAndDisplayExpectedOutput()
         {
             // Arrange
@@ -20,7 +37,7 @@ namespace BuildLogReporter.UnitTests
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
-            consoleRecorder.GetError().Should().Contain("'logPath' cannot be null or empty.");
+            consoleRecorder.GetError().Should().StartWith("'logPath' cannot be null or empty.");
         }
 
         [Fact]
@@ -37,7 +54,7 @@ namespace BuildLogReporter.UnitTests
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
-            consoleRecorder.GetError().Should().Contain("'logPath' has an unsupported file extension value of '.invalid'");
+            consoleRecorder.GetError().Should().StartWith("'logPath' has an unsupported file extension value of '.invalid'");
         }
 
         [Fact]
@@ -55,7 +72,7 @@ namespace BuildLogReporter.UnitTests
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
-            consoleRecorder.GetError().Should().Contain($"'{invalidPath}' does not exist.");
+            consoleRecorder.GetError().Should().StartWith($"'{invalidPath}' does not exist.");
         }
 
         [Theory]
