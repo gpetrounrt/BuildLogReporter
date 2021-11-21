@@ -95,5 +95,27 @@ namespace BuildLogReporter.UnitTests
             consoleRecorder.GetOutput().Should().BeEmpty();
             consoleRecorder.GetError().Should().BeEmpty();
         }
+
+        [Theory]
+        [InlineData(@"C:\temp\build.binlog")]
+        [InlineData(@"C:\temp\build.log")]
+        public async Task ProcessFileAsync_WhenVerboseIsEnabledAndHavingExistingInvalidPath_ShouldReturnZeroAndDisplayExpectedOutput(string logPath)
+        {
+            // Arrange
+            var mockFileSystem = new MockFileSystem();
+            var mockLogFile = new MockFileData(string.Empty);
+            mockFileSystem.AddFile(logPath, mockLogFile);
+            var programExecutor = new ProgramExecutor(mockFileSystem);
+            using var consoleRecorder = new ConsoleRecorder();
+
+            // Act
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath });
+
+            // Assert
+            result.Should().Be(0);
+            consoleRecorder.GetOutput().Should().StartWith($"Starting processing of '{logPath}'...");
+            consoleRecorder.GetOutput().Should().Contain($"Completed processing in");
+            consoleRecorder.GetError().Should().BeEmpty();
+        }
     }
 }
