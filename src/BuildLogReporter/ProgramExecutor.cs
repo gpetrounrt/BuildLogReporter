@@ -2,6 +2,7 @@
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
+using System.Reflection;
 
 namespace BuildLogReporter
 {
@@ -39,6 +40,13 @@ namespace BuildLogReporter
             {
                 logPathArgument
             };
+
+            var versionAsString = Assembly.GetExecutingAssembly()
+                 ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                 ?.InformationalVersion
+                 .ToString();
+
+            rootCommand.Description = $"Build Log Reporter {versionAsString}";
 
             rootCommand.Handler = CommandHandler.Create<string>((logPath) =>
             {

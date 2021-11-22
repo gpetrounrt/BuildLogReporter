@@ -3,6 +3,9 @@
   <!-- Items used by all projects. -->
   <ItemGroup>
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.StyleCop.globalconfig" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.244">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.354">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
