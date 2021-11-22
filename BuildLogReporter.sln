@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		CodeAnalysis.StyleCop.globalconfig = CodeAnalysis.StyleCop.globalconfig
 		License.md = License.md
 		Make.ps1 = Make.ps1
 		Readme.md = Readme.md
@@ -19,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD01E141-B02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3032B131-0ECB-47D4-9016-E9330D21A5B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildLogReporter.UnitTests", "tests\BuildLogReporter.UnitTests\BuildLogReporter.UnitTests.csproj", "{D25E1EE3-85E2-43E4-83F4-E26644B68159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildLogReporter.UnitTests", "tests\BuildLogReporter.UnitTests\BuildLogReporter.UnitTests.csproj", "{D25E1EE3-85E2-43E4-83F4-E26644B68159}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

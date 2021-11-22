@@ -1,5 +1,4 @@
-﻿
-namespace BuildLogReporter.UnitTests
+﻿namespace BuildLogReporter.UnitTests
 {
     public sealed class ConsoleRecorder : IDisposable
     {
