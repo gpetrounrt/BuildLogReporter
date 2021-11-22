@@ -1,5 +1,4 @@
-﻿
-namespace BuildLogReporter
+﻿namespace BuildLogReporter
 {
     public static class Program
     {
