@@ -8,4 +8,6 @@ summary/
 bin/
 obj/
 
+package/
+
 launchSettings.json

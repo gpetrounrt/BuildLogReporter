@@ -2,7 +2,7 @@
 [CmdletBinding()]
 Param(
     [Parameter(Position = 1)]
-    [ValidateSet("clean", "build", "unit-test", "coverage", "help")]
+    [ValidateSet("clean", "build", "unit-test", "coverage", "pack", "help")]
     [string] $action = "")
 
 # Establish and enforce coding rules in expressions, scripts and script blocks.
@@ -90,6 +90,11 @@ switch -wildcard ($action) {
 
     "coverage" {
         CreateCoverageReport
+        break
+    }
+
+    "pack" {
+        & dotnet pack $SolutionPath --configuration Release --no-build
         break
     }
 
