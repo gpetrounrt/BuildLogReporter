@@ -1,5 +1,16 @@
 <Project>
 
+  <!-- Properties used by all projects. -->
+  <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
+    <Features>strict</Features>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Georgios Petrou</Authors>
+    <Company>$(Authors)</Company>
+    <Product>Build Log Reporter</Product>
+    <Copyright>Copyright © 2021 Georgios Petrou</Copyright>
+  </PropertyGroup>
+
   <!-- Items used by all projects. -->
   <ItemGroup>
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.StyleCop.globalconfig" />
