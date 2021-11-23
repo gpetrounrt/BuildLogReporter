@@ -9,6 +9,14 @@
     <Company>$(Authors)</Company>
     <Product>Build Log Reporter</Product>
     <Copyright>Copyright © 2021 Georgios Petrou</Copyright>
+    <IntermediatePath>$(MSBuildThisFileDirectory)artifacts\Intermediate</IntermediatePath>
+    <BuiltPath>$(MSBuildThisFileDirectory)artifacts\Built\</BuiltPath>
+    <TargetFrameworkMonikerAssemblyAttributesFileClean>false</TargetFrameworkMonikerAssemblyAttributesFileClean>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <BaseIntermediateOutputPath>$(IntermediatePath)\$(Configuration)\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
+    <TargetFrameworkMonikerAssemblyAttributesPath>$(IntermediateOutputPath)$(TargetFrameworkName)\AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
+    <OutputPath>$(BuiltPath)$(Configuration)\$(MSBuildProjectName)\</OutputPath>
   </PropertyGroup>
 
   <!-- Items used by all projects. -->
