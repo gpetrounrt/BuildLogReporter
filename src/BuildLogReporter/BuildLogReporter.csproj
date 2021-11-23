@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>build-log-reporter</ToolCommandName>
-    <PackageOutputPath>./package</PackageOutputPath>
+    <PackageOutputPath>../../artifacts/Package</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

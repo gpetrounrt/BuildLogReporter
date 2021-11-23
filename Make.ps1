@@ -10,18 +10,11 @@ Set-StrictMode -Version Latest
 $errorActionPreference = "Stop"
 
 Set-Variable SolutionPath -Option Constant -Value "$PSScriptRoot\BuildLogReporter.sln" -Force -ErrorAction SilentlyContinue
-Set-Variable TestCoveragePath -Option Constant -Value "$PSScriptRoot\tests\coverage" -Force -ErrorAction SilentlyContinue
-Set-Variable TestCoverageResultsPath -Option Constant -Value "$TestCoveragePath\results" -Force -ErrorAction SilentlyContinue
-Set-Variable TestSummaryPath -Option Constant -Value "$PSScriptRoot\tests\summary" -Force -ErrorAction SilentlyContinue
+Set-Variable ArtifactsPath -Option Constant -Value "$PSScriptRoot\artifacts" -Force -ErrorAction SilentlyContinue
+Set-Variable TestCoveragePath -Option Constant -Value "$ArtifactsPath\Coverage" -Force -ErrorAction SilentlyContinue
+Set-Variable TestCoverageResultsPath -Option Constant -Value "$TestCoveragePath\Results" -Force -ErrorAction SilentlyContinue
+Set-Variable TestSummaryPath -Option Constant -Value "$ArtifactsPath\TestSummary" -Force -ErrorAction SilentlyContinue
 Set-Variable ToolsPath -Option Constant -Value "$PSScriptRoot\tools" -Force -ErrorAction SilentlyContinue
-
-function DeleteDirectories([string] $directoryName) {
-    $directories = Get-ChildItem $PSScriptRoot $directoryName -Recurse -Directory
-    foreach ($directory in $directories) {
-        $directoryPath = $directory.FullName
-        Remove-Item $directoryPath -Force -Recurse
-    }
-}
 
 function DeleteDirectory([string] $directoryPath) {
     if (Test-Path $directoryPath) {
@@ -32,11 +25,7 @@ function DeleteDirectory([string] $directoryPath) {
 function Clean() {
     & dotnet clean $SolutionPath --configuration Release
 
-    DeleteDirectories "bin"
-    DeleteDirectories "obj"
-
-    DeleteDirectory $TestSummaryPath
-    DeleteDirectory $TestCoveragePath
+    DeleteDirectory $ArtifactsPath
 }
 
 function CreateCoverageReport() {
@@ -52,7 +41,7 @@ function CreateCoverageReport() {
 
     & "$ToolsPath\reportgenerator.exe" `
         -reports:"$TestCoverageResultsPath\**\*.xml" `
-        -targetdir:"$TestCoveragePath\report" `
+        -targetdir:"$TestCoveragePath\Report" `
         -reporttypes:"Badges;Html;MarkdownSummary" `
         -title:"Build Log Reporter"
 }

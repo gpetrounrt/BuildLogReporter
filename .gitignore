@@ -1,13 +1,6 @@
 .vs/
 
+artifacts/
 tools/
-
-coverage/
-summary/
-
-bin/
-obj/
-
-package/
 
 launchSettings.json
