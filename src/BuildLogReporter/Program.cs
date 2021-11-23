@@ -1,4 +1,6 @@
-﻿namespace BuildLogReporter
+﻿using BuildLogReporter.Execution;
+
+namespace BuildLogReporter
 {
     public static class Program
     {

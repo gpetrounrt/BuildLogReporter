@@ -1,11 +1,14 @@
-﻿using System.CommandLine;
+﻿using System.Collections.ObjectModel;
+using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using System.Reflection;
 using BuildLogReporter.Diagnostics;
+using BuildLogReporter.Entries;
+using BuildLogReporter.Processors;
 
-namespace BuildLogReporter
+namespace BuildLogReporter.Execution
 {
     public sealed class ProgramExecutor
     {
@@ -13,21 +16,51 @@ namespace BuildLogReporter
 
         private readonly RootCommand _rootCommand;
 
-        public static void ProcessFile(string logPath, bool verbose)
+        public int ProcessLogFile(string logPath, bool verbose)
+        {
+            bool success;
+            ushort errorCount;
+            ushort warningCount;
+            ReadOnlyCollection<LogEntry> logEntries;
+            if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
+            {
+                var binaryLogProcessor = new BinaryLogProcessor(_fileSystem);
+                (success, errorCount, warningCount, logEntries) = binaryLogProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
+
+                if (!success)
+                {
+                    return 1;
+                }
+
+                if (verbose)
+                {
+                    Console.WriteLine($"Found {errorCount} error(s) and {warningCount} warning(s).");
+                }
+
+                return 0;
+            }
+
+            return 1;
+        }
+
+        public int ProcessFile(string logPath, bool verbose)
         {
             if (verbose)
             {
                 Console.WriteLine($"Starting processing of '{logPath}'...");
                 var executionTimer = new ExecutionTimer();
+                int result = -1;
                 executionTimer.Measure(() =>
                 {
-                    // TODO: Process log file.
+                    result = ProcessLogFile(logPath, verbose);
                 });
                 Console.WriteLine($"Completed processing in {executionTimer.GetElapsedTimeAsString()}.");
+
+                return result;
             }
             else
             {
-                // TODO: Process log file.
+                return ProcessLogFile(logPath, verbose);
             }
         }
 
