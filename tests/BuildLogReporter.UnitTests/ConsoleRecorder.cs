@@ -10,15 +10,11 @@
 
         private readonly TextWriter _originalErrorTextWriter;
 
-        public string GetOutput()
-        {
-            return _outputStringWriter.ToString();
-        }
+        public string GetOutput() =>
+            _outputStringWriter.ToString();
 
-        public string GetError()
-        {
-            return _errorStringWriter.ToString();
-        }
+        public string GetError() =>
+            _errorStringWriter.ToString();
 
         public void Dispose()
         {

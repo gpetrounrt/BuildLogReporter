@@ -3,6 +3,7 @@ using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using System.Reflection;
+using BuildLogReporter.Diagnostics;
 
 namespace BuildLogReporter
 {
@@ -10,8 +11,33 @@ namespace BuildLogReporter
     {
         private readonly IFileSystem _fileSystem;
 
-        public Task<int> ProcessFileAsync(string[] args)
+        private readonly RootCommand _rootCommand;
+
+        public static void ProcessFile(string logPath, bool verbose)
         {
+            if (verbose)
+            {
+                Console.WriteLine($"Starting processing of '{logPath}'...");
+                var executionTimer = new ExecutionTimer();
+                executionTimer.Measure(() =>
+                {
+                    // TODO: Process log file.
+                });
+                Console.WriteLine($"Completed processing in {executionTimer.GetElapsedTimeAsString()}.");
+            }
+            else
+            {
+                // TODO: Process log file.
+            }
+        }
+
+        public Task<int> ProcessFileAsync(string[] args) =>
+            _rootCommand.InvokeAsync(args);
+
+        public ProgramExecutor(IFileSystem fileSystem)
+        {
+            _fileSystem = fileSystem;
+
             var logPathArgument = new Argument<string>("logPath", "The path of the log file");
             logPathArgument.AddValidator(argumentResult =>
             {
@@ -36,29 +62,22 @@ namespace BuildLogReporter
                 return null;
             });
 
-            var rootCommand = new RootCommand
+            _rootCommand = new RootCommand
             {
-                logPathArgument
+                logPathArgument,
+                new Option<bool>(
+                    new[] { "--verbose", "-v" },
+                    () => false,
+                    "Whether to use verbose output")
             };
 
             var versionAsString = Assembly.GetExecutingAssembly()
                  ?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                 ?.InformationalVersion
-                 .ToString();
+                 ?.InformationalVersion;
 
-            rootCommand.Description = $"Build Log Reporter {versionAsString}";
+            _rootCommand.Description = $"Build Log Reporter {versionAsString}";
 
-            rootCommand.Handler = CommandHandler.Create<string>((logPath) =>
-            {
-                // TODO: Process log file.
-            });
-
-            return rootCommand.InvokeAsync(args);
-        }
-
-        public ProgramExecutor(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
+            _rootCommand.Handler = CommandHandler.Create<string, bool>(ProcessFile);
         }
 
         public ProgramExecutor()
