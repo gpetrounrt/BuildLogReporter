@@ -92,7 +92,7 @@ namespace BuildLogReporter.Processors
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex.ToString());
+                Console.Error.WriteLine($"Could not extract errors and warnings.{Environment.NewLine}{ex}");
 
                 return (false, 0, 0, new List<LogEntry>().AsReadOnly());
             }

@@ -16,7 +16,10 @@ namespace BuildLogReporter.Execution
 
         private readonly RootCommand _rootCommand;
 
-        public int ProcessLogFile(string logPath, bool verbose)
+        public int ProcessLogFile(
+            string logPath,
+            string reportPath,
+            bool verbose)
         {
             LogProcessor logProcessor;
             if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
@@ -44,11 +47,37 @@ namespace BuildLogReporter.Execution
                 Console.WriteLine($"Found {errorCount} error(s) and {warningCount} warning(s).");
             }
 
+            try
+            {
+                if (!_fileSystem.Directory.Exists(reportPath))
+                {
+                    if (verbose)
+                    {
+                        Console.WriteLine($"Creating '{reportPath}'...");
+                    }
+
+                    _fileSystem.Directory.CreateDirectory(reportPath);
+
+                    if (verbose)
+                    {
+                        Console.WriteLine($"Created report directory.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Could not create {reportPath}.{Environment.NewLine}{ex}");
+                return 1;
+            }
+
             // TODO: Implement reporters.
             return 0;
         }
 
-        public int ProcessFile(string logPath, bool verbose)
+        public int ProcessFile(
+            string logPath,
+            string reportPath,
+            bool verbose)
         {
             if (verbose)
             {
@@ -57,7 +86,7 @@ namespace BuildLogReporter.Execution
                 int result = -1;
                 executionTimer.Measure(() =>
                 {
-                    result = ProcessLogFile(logPath, verbose);
+                    result = ProcessLogFile(logPath, reportPath, verbose);
                 });
                 Console.WriteLine($"Completed processing in {executionTimer.GetElapsedTimeAsString()}.");
 
@@ -65,7 +94,7 @@ namespace BuildLogReporter.Execution
             }
             else
             {
-                return ProcessLogFile(logPath, verbose);
+                return ProcessLogFile(logPath, reportPath, verbose);
             }
         }
 
@@ -100,9 +129,27 @@ namespace BuildLogReporter.Execution
                 return null;
             });
 
+            var reportPathArgument = new Argument<string>("reportPath", "The path of the report files");
+            reportPathArgument.AddValidator(argumentResult =>
+            {
+                var reportPath = argumentResult.GetValueOrDefault<string>();
+                if (string.IsNullOrWhiteSpace(reportPath))
+                {
+                    return $"'{argumentResult.Argument.Name}' cannot be null or empty.";
+                }
+
+                if (reportPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+                {
+                    return $"'{reportPath}' contains invalid characters.";
+                }
+
+                return null;
+            });
+
             _rootCommand = new RootCommand
             {
                 logPathArgument,
+                reportPathArgument,
                 new Option<bool>(
                     new[] { "--verbose", "-v" },
                     () => false,
@@ -115,7 +162,7 @@ namespace BuildLogReporter.Execution
 
             _rootCommand.Description = $"Build Log Reporter {versionAsString}";
 
-            _rootCommand.Handler = CommandHandler.Create<string, bool>(ProcessFile);
+            _rootCommand.Handler = CommandHandler.Create<string, string, bool>(ProcessFile);
         }
 
         public ProgramExecutor()

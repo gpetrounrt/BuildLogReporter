@@ -34,11 +34,11 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { string.Empty });
+            var result = await programExecutor.ProcessFileAsync(new string[] { string.Empty, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(1);
-            consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
+            consoleRecorder.GetOutput().Should().Contain("<logPath>     The path of the log file");
             consoleRecorder.GetError().Should().StartWith("'logPath' cannot be null or empty.");
         }
 
@@ -51,11 +51,11 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { @"C:\temp\build.invalid" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { @"C:\temp\build.invalid", @"C:\temp\out" });
 
             // Assert
             result.Should().Be(1);
-            consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
+            consoleRecorder.GetOutput().Should().Contain("<logPath>     The path of the log file");
             consoleRecorder.GetError().Should().StartWith("'logPath' has an unsupported file extension value of '.invalid'");
         }
 
@@ -69,11 +69,11 @@ namespace BuildLogReporter.UnitTests.Execution
             const string invalidPath = @"C:\temp\build.binlog";
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { invalidPath });
+            var result = await programExecutor.ProcessFileAsync(new string[] { invalidPath, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(1);
-            consoleRecorder.GetOutput().Should().Contain("<logPath>  The path of the log file");
+            consoleRecorder.GetOutput().Should().Contain("<logPath>     The path of the log file");
             consoleRecorder.GetError().Should().StartWith($"'{invalidPath}' does not exist.");
         }
 
@@ -89,12 +89,12 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { logPath });
+            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().BeEmpty();
-            consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
+            consoleRecorder.GetError().Should().StartWith($"Could not extract errors and warnings.{Environment.NewLine}System.IO.EndOfStreamException");
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { logPath });
+            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(0);
@@ -129,13 +129,13 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath });
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().StartWith($"Starting processing of '{logPath}'...");
             consoleRecorder.GetOutput().Should().Contain($"Completed processing in");
-            consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
+            consoleRecorder.GetError().Should().StartWith($"Could not extract errors and warnings.{Environment.NewLine}System.IO.EndOfStreamException");
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath });
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" });
 
             // Assert
             result.Should().Be(0);
