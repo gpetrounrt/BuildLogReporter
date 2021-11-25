@@ -1,15 +1,22 @@
-﻿namespace BuildLogReporter.Processors
+﻿using System.Text.Json.Serialization;
+
+namespace BuildLogReporter.Processors
 {
     public readonly struct LogEntry : IEquatable<LogEntry>
     {
+        [JsonPropertyName("type")]
         public LogEntryType Type { get; }
 
+        [JsonPropertyName("code")]
         public string Code { get; }
 
+        [JsonPropertyName("message")]
         public string Message { get; }
 
+        [JsonPropertyName("file_path")]
         public string FilePath { get; }
 
+        [JsonPropertyName("line_number")]
         public int LineNumber { get; }
 
         public static bool operator ==(LogEntry first, LogEntry second) =>
