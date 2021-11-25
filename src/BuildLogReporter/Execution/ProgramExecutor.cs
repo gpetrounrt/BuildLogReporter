@@ -18,29 +18,34 @@ namespace BuildLogReporter.Execution
 
         public int ProcessLogFile(string logPath, bool verbose)
         {
-            bool success;
-            ushort errorCount;
-            ushort warningCount;
-            ReadOnlyCollection<LogEntry> logEntries;
+            LogProcessor logProcessor;
             if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
             {
-                var binaryLogProcessor = new BinaryLogProcessor(_fileSystem);
-                (success, errorCount, warningCount, logEntries) = binaryLogProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
-
-                if (!success)
-                {
-                    return 1;
-                }
-
-                if (verbose)
-                {
-                    Console.WriteLine($"Found {errorCount} error(s) and {warningCount} warning(s).");
-                }
-
-                return 0;
+                logProcessor = new BinaryLogProcessor(_fileSystem);
+            }
+            else if (logPath.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
+            {
+                logProcessor = new TextLogProcessor(_fileSystem);
+            }
+            else
+            {
+                Console.Error.WriteLine("Could not initialize log processor.");
+                return 1;
             }
 
-            return 1;
+            (bool success, ushort errorCount, ushort warningCount, ReadOnlyCollection<LogEntry> logEntries) = logProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
+            if (!success)
+            {
+                return 1;
+            }
+
+            if (verbose)
+            {
+                Console.WriteLine($"Found {errorCount} error(s) and {warningCount} warning(s).");
+            }
+
+            // TODO: Implement reporters.
+            return 0;
         }
 
         public int ProcessFile(string logPath, bool verbose)
