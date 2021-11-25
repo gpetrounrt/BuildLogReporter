@@ -77,14 +77,13 @@ namespace BuildLogReporter.UnitTests.Execution
             consoleRecorder.GetError().Should().StartWith($"'{invalidPath}' does not exist.");
         }
 
-        [Theory]
-        [InlineData(@"C:\temp\build.binlog")]
-        [InlineData(@"C:\temp\build.log")]
-        public async Task ProcessFileAsync_WhenHavingExistingInvalidPath_ShouldReturnOneAndDisplayExpectedOutput(string logPath)
+        [Fact]
+        public async Task ProcessFileAsync_WhenHavingEmptyExistingBinaryLogPath_ShouldReturnOneAndDisplayExpectedOutput()
         {
             // Arrange
             var mockFileSystem = new MockFileSystem();
             var mockLogFile = new MockFileData(string.Empty);
+            const string logPath = @"C:\temp\build.binlog";
             mockFileSystem.AddFile(logPath, mockLogFile);
             var programExecutor = new ProgramExecutor(mockFileSystem);
             using var consoleRecorder = new ConsoleRecorder();
@@ -95,25 +94,36 @@ namespace BuildLogReporter.UnitTests.Execution
             // Assert
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().BeEmpty();
-
-            if (logPath.EndsWith("binlog"))
-            {
-                consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
-            }
-            else
-            {
-                consoleRecorder.GetError().Should().BeEmpty();
-            }
+            consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
         }
 
-        [Theory]
-        [InlineData(@"C:\temp\build.binlog")]
-        [InlineData(@"C:\temp\build.log")]
-        public async Task ProcessFileAsync_WhenVerboseIsEnabledAndHavingExistingInvalidPath_ShouldReturnZeroAndDisplayExpectedOutput(string logPath)
+        [Fact]
+        public async Task ProcessFileAsync_WhenHavingEmptyExistingTextLogPath_ShouldReturnZeroAndDisplayExpectedOutput()
         {
             // Arrange
             var mockFileSystem = new MockFileSystem();
             var mockLogFile = new MockFileData(string.Empty);
+            const string logPath = @"C:\temp\build.log";
+            mockFileSystem.AddFile(logPath, mockLogFile);
+            var programExecutor = new ProgramExecutor(mockFileSystem);
+            using var consoleRecorder = new ConsoleRecorder();
+
+            // Act
+            var result = await programExecutor.ProcessFileAsync(new string[] { logPath });
+
+            // Assert
+            result.Should().Be(0);
+            consoleRecorder.GetOutput().Should().BeEmpty();
+            consoleRecorder.GetError().Should().BeEmpty();
+        }
+
+        [Fact]
+        public async Task ProcessFileAsync_WhenVerboseIsEnabledAndHavingEmptyExistingBinaryLogPath_ShouldReturnOneAndDisplayExpectedOutput()
+        {
+            // Arrange
+            var mockFileSystem = new MockFileSystem();
+            var mockLogFile = new MockFileData(string.Empty);
+            const string logPath = @"C:\temp\build.binlog";
             mockFileSystem.AddFile(logPath, mockLogFile);
             var programExecutor = new ProgramExecutor(mockFileSystem);
             using var consoleRecorder = new ConsoleRecorder();
@@ -125,14 +135,28 @@ namespace BuildLogReporter.UnitTests.Execution
             result.Should().Be(1);
             consoleRecorder.GetOutput().Should().StartWith($"Starting processing of '{logPath}'...");
             consoleRecorder.GetOutput().Should().Contain($"Completed processing in");
-            if (logPath.EndsWith("binlog"))
-            {
-                consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
-            }
-            else
-            {
-                consoleRecorder.GetError().Should().BeEmpty();
-            }
+            consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
+        }
+
+        [Fact]
+        public async Task ProcessFileAsync_WhenVerboseIsEnabledAndHavingEmptyExistingTextLogPath_ShouldReturnZeroAndDisplayExpectedOutput()
+        {
+            // Arrange
+            var mockFileSystem = new MockFileSystem();
+            var mockLogFile = new MockFileData(string.Empty);
+            const string logPath = @"C:\temp\build.log";
+            mockFileSystem.AddFile(logPath, mockLogFile);
+            var programExecutor = new ProgramExecutor(mockFileSystem);
+            using var consoleRecorder = new ConsoleRecorder();
+
+            // Act
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath });
+
+            // Assert
+            result.Should().Be(0);
+            consoleRecorder.GetOutput().Should().StartWith($"Starting processing of '{logPath}'...");
+            consoleRecorder.GetOutput().Should().Contain($"Completed processing in");
+            consoleRecorder.GetError().Should().BeEmpty();
         }
     }
 }
