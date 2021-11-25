@@ -24,15 +24,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3032B131
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildLogReporter.UnitTests", "tests\BuildLogReporter.UnitTests\BuildLogReporter.UnitTests.csproj", "{D25E1EE3-85E2-43E4-83F4-E26644B68159}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestProjects", "TestProjects", "{2A37A3F6-A665-464F-8C15-AC2FEC3C9307}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestSupportProjects", "TestSupportProjects", "{2A37A3F6-A665-464F-8C15-AC2FEC3C9307}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithErrors", "tests\TestProjects\ProjectWithErrors\ProjectWithErrors.csproj", "{6DBC0E94-DBB7-4510-869D-78AE8FB8310B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithErrors", "tests\TestSupportProjects\ProjectWithErrors\ProjectWithErrors.csproj", "{6DBC0E94-DBB7-4510-869D-78AE8FB8310B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithErrorsAndWarnings", "tests\TestProjects\ProjectWithErrorsAndWarnings\ProjectWithErrorsAndWarnings.csproj", "{9D633AF1-723B-4279-B409-5765F63F2B40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithErrorsAndWarnings", "tests\TestSupportProjects\ProjectWithErrorsAndWarnings\ProjectWithErrorsAndWarnings.csproj", "{9D633AF1-723B-4279-B409-5765F63F2B40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithoutErrorsOrWarnings", "tests\TestProjects\ProjectWithoutErrorsOrWarnings\ProjectWithoutErrorsOrWarnings.csproj", "{E97874A2-1295-457E-8385-B8C1ECF1CA9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithoutErrorsOrWarnings", "tests\TestSupportProjects\ProjectWithoutErrorsOrWarnings\ProjectWithoutErrorsOrWarnings.csproj", "{E97874A2-1295-457E-8385-B8C1ECF1CA9C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithWarnings", "tests\TestProjects\ProjectWithWarnings\ProjectWithWarnings.csproj", "{C1A70E48-4F3C-404A-BAF9-D91C8AAEBDF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectWithWarnings", "tests\TestSupportProjects\ProjectWithWarnings\ProjectWithWarnings.csproj", "{C1A70E48-4F3C-404A-BAF9-D91C8AAEBDF9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,10 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
+using BuildLogReporter.Execution;
+using BuildLogReporter.UnitTests.Diagnostics;
 using FluentAssertions;
 using Xunit;
 
-namespace BuildLogReporter.UnitTests
+namespace BuildLogReporter.UnitTests.Execution
 {
     public sealed class ProgramExecutorTests
     {
@@ -62,9 +64,9 @@ namespace BuildLogReporter.UnitTests
         {
             // Arrange
             var mockFileSystem = new MockFileSystem();
-            const string invalidPath = @"C:\temp\build.binlog";
             var programExecutor = new ProgramExecutor(mockFileSystem);
             using var consoleRecorder = new ConsoleRecorder();
+            const string invalidPath = @"C:\temp\build.binlog";
 
             // Act
             var result = await programExecutor.ProcessFileAsync(new string[] { invalidPath });
@@ -78,7 +80,7 @@ namespace BuildLogReporter.UnitTests
         [Theory]
         [InlineData(@"C:\temp\build.binlog")]
         [InlineData(@"C:\temp\build.log")]
-        public async Task ProcessFileAsync_WhenHavingExistingInvalidPath_ShouldReturnZeroAndDisplayExpectedOutput(string logPath)
+        public async Task ProcessFileAsync_WhenHavingExistingInvalidPath_ShouldReturnOneAndDisplayExpectedOutput(string logPath)
         {
             // Arrange
             var mockFileSystem = new MockFileSystem();
@@ -91,9 +93,17 @@ namespace BuildLogReporter.UnitTests
             var result = await programExecutor.ProcessFileAsync(new string[] { logPath });
 
             // Assert
-            result.Should().Be(0);
+            result.Should().Be(1);
             consoleRecorder.GetOutput().Should().BeEmpty();
-            consoleRecorder.GetError().Should().BeEmpty();
+
+            if (logPath.EndsWith("binlog"))
+            {
+                consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
+            }
+            else
+            {
+                consoleRecorder.GetError().Should().BeEmpty();
+            }
         }
 
         [Theory]
@@ -112,10 +122,17 @@ namespace BuildLogReporter.UnitTests
             var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath });
 
             // Assert
-            result.Should().Be(0);
+            result.Should().Be(1);
             consoleRecorder.GetOutput().Should().StartWith($"Starting processing of '{logPath}'...");
             consoleRecorder.GetOutput().Should().Contain($"Completed processing in");
-            consoleRecorder.GetError().Should().BeEmpty();
+            if (logPath.EndsWith("binlog"))
+            {
+                consoleRecorder.GetError().Should().StartWith("System.IO.EndOfStreamException");
+            }
+            else
+            {
+                consoleRecorder.GetError().Should().BeEmpty();
+            }
         }
     }
 }
