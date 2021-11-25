@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.IO.Abstractions;
-using BuildLogReporter.Entries;
+﻿using System.IO.Abstractions;
 
 namespace BuildLogReporter.Processors
 {
@@ -8,7 +6,7 @@ namespace BuildLogReporter.Processors
     {
         protected IFileSystem FileSystem { get; }
 
-        public abstract (bool Success, ushort ErrorCount, ushort WarningCount, ReadOnlyCollection<LogEntry> LogEntries) CountAndGetErrorsAndWarnings(
+        public abstract (bool Success, ProcessedLogResult ProcessedLogResult) CountAndGetErrorsAndWarnings(
             string logPath,
             bool verbose);
 

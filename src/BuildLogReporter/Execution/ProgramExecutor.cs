@@ -5,7 +5,6 @@ using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using System.Reflection;
 using BuildLogReporter.Diagnostics;
-using BuildLogReporter.Entries;
 using BuildLogReporter.Processors;
 
 namespace BuildLogReporter.Execution
@@ -36,7 +35,7 @@ namespace BuildLogReporter.Execution
                 return 1;
             }
 
-            (bool success, ushort errorCount, ushort warningCount, ReadOnlyCollection<LogEntry> logEntries) = logProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
+            (bool success, ProcessedLogResult processedLogResult) = logProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
             if (!success)
             {
                 return 1;
@@ -44,7 +43,7 @@ namespace BuildLogReporter.Execution
 
             if (verbose)
             {
-                Console.WriteLine($"Found {errorCount} error(s) and {warningCount} warning(s).");
+                Console.WriteLine($"Found {processedLogResult.ErrorCount} error(s) and {processedLogResult.WarningCount} warning(s).");
             }
 
             try

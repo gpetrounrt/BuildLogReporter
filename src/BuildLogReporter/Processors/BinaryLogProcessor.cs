@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO.Abstractions;
 using BuildLogReporter.Diagnostics;
-using BuildLogReporter.Entries;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.StructuredLogger;
 
@@ -9,7 +8,7 @@ namespace BuildLogReporter.Processors
 {
     public sealed class BinaryLogProcessor : LogProcessor
     {
-        private (bool Success, ushort ErrorCount, ushort WarningCount, ReadOnlyCollection<LogEntry> LogEntries) ExtractErrorsAndWarnings(
+        private (bool Success, ProcessedLogResult ProcessedLogResult) ExtractErrorsAndWarnings(
             string logPath,
             bool verbose)
         {
@@ -88,17 +87,17 @@ namespace BuildLogReporter.Processors
                     Console.WriteLine($"Processed {recordCount} record(s).");
                 }
 
-                return (true, errorCount, warningCount, logEntries.AsReadOnly());
+                return (true, new ProcessedLogResult(errorCount, warningCount, logEntries.AsReadOnly()));
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine($"Could not extract errors and warnings.{Environment.NewLine}{ex}");
 
-                return (false, 0, 0, new List<LogEntry>().AsReadOnly());
+                return (false, new ProcessedLogResult(0, 0, new List<LogEntry>().AsReadOnly()));
             }
         }
 
-        public override (bool Success, ushort ErrorCount, ushort WarningCount, ReadOnlyCollection<LogEntry> LogEntries) CountAndGetErrorsAndWarnings(
+        public override (bool Success, ProcessedLogResult ProcessedLogResult) CountAndGetErrorsAndWarnings(
             string logPath,
             bool verbose)
         {
@@ -106,7 +105,7 @@ namespace BuildLogReporter.Processors
             {
                 Console.WriteLine($"Starting extraction of log entries...");
                 var executionTimer = new ExecutionTimer();
-                (bool Success, ushort ErrorCount, ushort WarningCount, ReadOnlyCollection<LogEntry> LogEntries) result = (false, 0, 0, new List<LogEntry>().AsReadOnly());
+                (bool Success, ProcessedLogResult ProcessedLogResult) result = (false, new ProcessedLogResult(0, 0, new List<LogEntry>().AsReadOnly()));
                 executionTimer.Measure(() =>
                 {
                     result = ExtractErrorsAndWarnings(logPath, verbose);
