@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using BuildLogReporter.Entries;
-using BuildLogReporter.Processors;
+﻿using BuildLogReporter.Processors;
 using BuildLogReporter.UnitTests.Diagnostics;
 using BuildLogReporter.UnitTests.Fixtures;
 using BuildLogReporter.UnitTests.Helpers;
@@ -33,13 +31,14 @@ namespace BuildLogReporter.UnitTests.Processors
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            (bool success, ushort actualErrorCount, ushort actualWarningCount, ReadOnlyCollection<LogEntry> logEntries) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithErrorsBinlogPath, verbose);
+            (bool actualSuccess, ProcessedLogResult actualProcessedLogResult) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithErrorsBinlogPath, verbose);
 
             // Assert
-            success.Should().BeTrue();
-            actualErrorCount.Should().Be(2);
-            actualWarningCount.Should().Be(0);
+            actualSuccess.Should().BeTrue();
+            actualProcessedLogResult.ErrorCount.Should().Be(2);
+            actualProcessedLogResult.WarningCount.Should().Be(0);
 
+            var logEntries = actualProcessedLogResult.LogEntries;
             logEntries.Should().HaveCount(2);
 
             logEntries[0].Type.Should().Be(LogEntryType.Error);
@@ -81,13 +80,14 @@ namespace BuildLogReporter.UnitTests.Processors
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            (bool success, ushort actualErrorCount, ushort actualWarningCount, ReadOnlyCollection<LogEntry> logEntries) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithErrorsAndWarningsBinlogPath, verbose);
+            (bool actualSuccess, ProcessedLogResult actualProcessedLogResult) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithErrorsAndWarningsBinlogPath, verbose);
 
             // Assert
-            success.Should().BeTrue();
-            actualErrorCount.Should().Be(2);
-            actualWarningCount.Should().Be(2);
+            actualSuccess.Should().BeTrue();
+            actualProcessedLogResult.ErrorCount.Should().Be(2);
+            actualProcessedLogResult.WarningCount.Should().Be(2);
 
+            var logEntries = actualProcessedLogResult.LogEntries;
             logEntries.Should().HaveCount(4);
 
             logEntries[0].Type.Should().Be(LogEntryType.Warning);
@@ -141,14 +141,14 @@ namespace BuildLogReporter.UnitTests.Processors
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            (bool success, ushort actualErrorCount, ushort actualWarningCount, ReadOnlyCollection<LogEntry> logEntries) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithoutErrorsOrWarningsBinlogPath, verbose);
+            (bool actualSuccess, ProcessedLogResult actualProcessedLogResult) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithoutErrorsOrWarningsBinlogPath, verbose);
 
             // Assert
-            success.Should().BeTrue();
-            actualErrorCount.Should().Be(0);
-            actualWarningCount.Should().Be(0);
+            actualSuccess.Should().BeTrue();
+            actualProcessedLogResult.ErrorCount.Should().Be(0);
+            actualProcessedLogResult.WarningCount.Should().Be(0);
 
-            logEntries.Should().HaveCount(0);
+            actualProcessedLogResult.LogEntries.Should().HaveCount(0);
 
             if (verbose)
             {
@@ -177,13 +177,14 @@ namespace BuildLogReporter.UnitTests.Processors
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            (bool success, ushort actualErrorCount, ushort actualWarningCount, ReadOnlyCollection<LogEntry> logEntries) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithWarningsBinlogPath, verbose);
+            (bool actualSuccess, ProcessedLogResult actualProcessedLogResult) = textLogProcessor.CountAndGetErrorsAndWarnings(projectWithWarningsBinlogPath, verbose);
 
             // Assert
-            success.Should().BeTrue();
-            actualErrorCount.Should().Be(0);
-            actualWarningCount.Should().Be(2);
+            actualSuccess.Should().BeTrue();
+            actualProcessedLogResult.ErrorCount.Should().Be(0);
+            actualProcessedLogResult.WarningCount.Should().Be(2);
 
+            var logEntries = actualProcessedLogResult.LogEntries;
             logEntries.Should().HaveCount(2);
 
             logEntries[0].Type.Should().Be(LogEntryType.Warning);

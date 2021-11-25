@@ -1,4 +1,4 @@
-﻿namespace BuildLogReporter.Entries
+﻿namespace BuildLogReporter.Processors
 {
     public readonly struct LogEntry : IEquatable<LogEntry>
     {

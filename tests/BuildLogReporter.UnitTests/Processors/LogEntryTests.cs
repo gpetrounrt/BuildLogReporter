@@ -1,8 +1,8 @@
-﻿using BuildLogReporter.Entries;
+﻿using BuildLogReporter.Processors;
 using FluentAssertions;
 using Xunit;
 
-namespace BuildLogReporter.UnitTests.Entries
+namespace BuildLogReporter.UnitTests.Processors
 {
     public sealed class LogEntryTests
     {
