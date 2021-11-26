@@ -1,8 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace BuildLogReporter.Processors
 {
-    public readonly struct LogEntry : IEquatable<LogEntry>
+    public readonly struct LogEntry : IEquatable<LogEntry>, IXmlSerializable
     {
         [JsonPropertyName("type")]
         public LogEntryType Type { get; }
@@ -63,6 +67,26 @@ Code: {Code}
 Message: {Message}
 File path: {FilePath}
 Line Number: {LineNumber}";
+
+        public XmlSchema? GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteStartElement(nameof(LogEntry));
+            writer.WriteAttributeString(nameof(Type), Type.ToString());
+            writer.WriteAttributeString(nameof(Code), Code);
+            writer.WriteAttributeString(nameof(Message), Message);
+            writer.WriteAttributeString(nameof(FilePath), FilePath);
+            writer.WriteAttributeString(nameof(LineNumber), LineNumber.ToString(CultureInfo.InvariantCulture));
+            writer.WriteEndElement();
+        }
 
         public LogEntry(
             LogEntryType type,

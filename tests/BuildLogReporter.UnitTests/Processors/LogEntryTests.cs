@@ -1,4 +1,6 @@
-﻿using BuildLogReporter.Processors;
+﻿using System.Text;
+using System.Xml;
+using BuildLogReporter.Processors;
 using FluentAssertions;
 using Xunit;
 
@@ -216,14 +218,14 @@ namespace BuildLogReporter.UnitTests.Processors
         }
 
         [Fact]
-        public void ToString_WhenHavingCorrectPropertyValues_ShouldShowExpectedResult()
+        public void ToString_WhenHavingCorrectPropertyValues_ShouldReturnExpectedResult()
         {
             // Arrange
             var logEntry = new LogEntry(
                 LogEntryType.Error,
-                "C1",
+                "Code",
                 "Message",
-                "Path",
+                "FilePath",
                 1);
 
             // Act
@@ -232,10 +234,32 @@ namespace BuildLogReporter.UnitTests.Processors
             // Assert
             result.Should().Be(@"
 Type: Error
-Code: C1
+Code: Code
 Message: Message
-File path: Path
+File path: FilePath
 Line Number: 1");
+        }
+
+        [Fact]
+        public void WriteXml_WhenHavingCorrectPropertyValues_ShouldReturnExpectedResult()
+        {
+            // Arrange
+            var logEntry = new LogEntry(
+                LogEntryType.Error,
+                "Code",
+                "Message",
+                "FilePath",
+                1);
+
+            var stringBuilder = new StringBuilder();
+            using var xmlWriter = XmlWriter.Create(stringBuilder);
+
+            // Act
+            logEntry.WriteXml(xmlWriter);
+            xmlWriter.Flush();
+
+            // Assert
+            stringBuilder.ToString().Should().EndWith(@"<LogEntry Type=""Error"" Code=""Code"" Message=""Message"" FilePath=""FilePath"" LineNumber=""1"" />");
         }
 
         [Fact]
