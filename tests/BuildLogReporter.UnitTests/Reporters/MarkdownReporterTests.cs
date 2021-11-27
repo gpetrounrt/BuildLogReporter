@@ -6,10 +6,10 @@ using Xunit;
 
 namespace BuildLogReporter.UnitTests.Reporters
 {
-    public sealed class JsonReporterTests
+    public sealed class MarkdownReporterTests
     {
         [Fact]
-        public void GetReportAsString_WhenHavingValidProcessedLogResult_ShouldCreateCorrectJSON()
+        public void GetReportAsString_WhenHavingValidProcessedLogResult_ShouldCreateCorrectMarkdown()
         {
             // Arrange
             ushort expectedErrorCount = 1;
@@ -43,15 +43,15 @@ namespace BuildLogReporter.UnitTests.Reporters
                 expectedWarningCount,
                 expectedLogEntries);
 
-            var jsonReporter = new JsonReporter();
+            var jsonReporter = new MarkdownReporter();
 
             // Act
             var reportAsString = jsonReporter.GetReportAsString(processedLogResult);
 
             // Assert
-            reportAsString.Should().Contain($@"""error_count"": {expectedErrorCount}");
-            reportAsString.Should().Contain($@"""warning_count"": {expectedWarningCount}");
-            reportAsString.Should().Contain($@"""log_entries"": [");
+            reportAsString.Should().Contain($"Errors: {expectedErrorCount}, Warnings: {expectedWarningCount}");
+            reportAsString.Should().Contain("| Error | Code | Message | FilePath | 1 |");
+            reportAsString.Should().Contain("| Warning | Code | Message | FilePath | 2 |");
         }
     }
 }
