@@ -6,8 +6,7 @@ namespace BuildLogReporter.Reporters
 {
     public sealed class HtmlReporter : Reporter
     {
-        private const string HtmlTemplate = @"
-<html>
+        private const string HtmlTemplate = @"<html>
   <head>
     <style>
       body {{
@@ -158,7 +157,7 @@ namespace BuildLogReporter.Reporters
     <input type=""text"" id=""searchInput"" onkeyup=""searchTable()"" placeholder=""Search table..."">
     <table id=""errorsAndWarningsTable"">
       <th style=""width: 5%"" onclick=""sortTable(0, false)"">Type</th><th style=""width: 10%"" onclick=""sortTable(1, false)"">Code</th><th style=""width: 40%"" onclick=""sortTable(2, false)"">Description</th><th style=""width: 40%"" onclick=""sortTable(3, false)"">File</th><th style=""width: 5%"" onclick=""sortTable(4, true)"">Line</th>
-      {4}
+{4}
     </table>
   </body>
 </html>";
@@ -178,7 +177,7 @@ namespace BuildLogReporter.Reporters
             var tableRowsStringBuilder = new StringBuilder();
             foreach (var logEntry in processedLogResult.LogEntries)
             {
-                tableRowsStringBuilder.Append("<tr><td style=\"text-align:center;\">")
+                tableRowsStringBuilder.Append("      <tr><td style=\"text-align:center;\">")
                     .Append(logEntry.Type == LogEntryType.Error ? ErrorSymbol : WarningSymbol)
                     .Append("</td><td>")
                     .Append(logEntry.Code)
@@ -189,6 +188,11 @@ namespace BuildLogReporter.Reporters
                     .Append("</td><td>")
                     .Append(logEntry.LineNumber)
                     .AppendLine("</td></tr>");
+            }
+
+            if (tableRowsStringBuilder.Length >= Environment.NewLine.Length)
+            {
+                tableRowsStringBuilder.Length -= Environment.NewLine.Length;
             }
 
             var htmlPage = string.Format(

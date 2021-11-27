@@ -2,7 +2,7 @@
 [CmdletBinding()]
 Param(
     [Parameter(Position = 1)]
-    [ValidateSet("clean", "build", "unit-test", "coverage", "pack", "help")]
+    [ValidateSet("clean", "build", "unit-test", "integration-test", "coverage", "pack", "help")]
     [string] $action = "")
 
 # Establish and enforce coding rules in expressions, scripts and script blocks.
@@ -34,6 +34,15 @@ function Build() {
     & dotnet build $SolutionPath --configuration Release -bl:$binlogPath
 }
 
+function Test([string] $testType) {
+    & dotnet test --configuration Release `
+        --no-build `
+        --filter FullyQualifiedName~$testType `
+        --collect:"XPlat Code Coverage" `
+        --logger "junit;LogFilePath=$TestSummaryPath/{assembly}.xml" `
+        --results-directory "$TestCoverageResultsPath"
+}
+
 function CreateCoverageReport() {
     $isReportGeneratorInstalled = $false
     if (Test-Path $ToolsPath) {
@@ -53,17 +62,21 @@ function CreateCoverageReport() {
 }
 
 function DisplayHelp() {
+
+    $actions = @(
+        @{ Name = "clean"; Description="Cleans the solution artifacts" },
+        @{ Name = "build"; Description="Builds the solution" },
+        @{ Name = "unit-test"; Description="Runs the unit tests" },
+        @{ Name = "integration-test"; Description="Runs the integration tests" },
+        @{ Name = "coverage"; Description="Generates the coverage reports" },
+        @{ Name = "pack"; Description="Generates the NuGet package" }
+        @{ Name = "help"; Description="Displays this content" })
+
     Write-Host
     Write-Host "Usage: .\Make.ps1 [action]"
     Write-Host
     Write-Host "Available actions:"
-    Write-Host "clean`t`tCleans the solution artifacts"
-    Write-Host "build`t`tBuilds the solution"
-    Write-Host "unit-test`tRuns the unit tests"
-    Write-Host "coverage`tGenerates the coverage reports"
-    Write-Host "pack`t`tGenerates the NuGet package"
-    Write-Host "help`t`tDisplays this content"
-    Write-Host
+    $actions | % { [PSCustomObject]$_ } | Format-Table -HideTableHeaders
 }
 
 switch -wildcard ($action) {
@@ -78,11 +91,12 @@ switch -wildcard ($action) {
     }
 
     "unit-test" {
-        & dotnet test --configuration Release `
-            --no-build `
-            --collect:"XPlat Code Coverage" `
-            --logger "junit;LogFilePath=$TestSummaryPath/{assembly}.xml" `
-            --results-directory "$TestCoverageResultsPath"
+        Test "UnitTests"
+        break
+    }
+
+    "integration-test" {
+        Test "IntegrationTests"
         break
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 using BuildLogReporter.Execution;
-using BuildLogReporter.UnitTests.Diagnostics;
+using BuildLogReporter.Tests.Common.Diagnostics;
 using FluentAssertions;
 using Xunit;
 

@@ -1,0 +1,29 @@
+Starting processing of '\ProjectWithoutErrorsOrWarnings\output.binlog'...
+Starting extraction of log entries...
+Opening binary log file...
+Opened binary log file.
+Processing records...
+Processed N record(s).
+Completed extraction in elapsed time.
+Found 0 error(s) and 0 warning(s).
+Generating Badge report...
+Generated report in elapsed time.
+Saving report to \ProjectWithoutErrorsOrWarnings.
+Saved report.
+Generating Html report...
+Generated report in elapsed time.
+Saving report to \ProjectWithoutErrorsOrWarnings.
+Saved report.
+Generating Json report...
+Generated report in elapsed time.
+Saving report to \ProjectWithoutErrorsOrWarnings.
+Saved report.
+Generating Markdown report...
+Generated report in elapsed time.
+Saving report to \ProjectWithoutErrorsOrWarnings.
+Saved report.
+Generating Xml report...
+Generated report in elapsed time.
+Saving report to \ProjectWithoutErrorsOrWarnings.
+Saved report.
+Completed processing in elapsed time.

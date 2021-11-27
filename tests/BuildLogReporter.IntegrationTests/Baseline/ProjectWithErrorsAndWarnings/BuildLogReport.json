@@ -1,0 +1,34 @@
+{
+  "error_count": 2,
+  "warning_count": 2,
+  "log_entries": [
+    {
+      "type": 0,
+      "code": "CS0029",
+      "message": "Cannot implicitly convert type \u0027string\u0027 to \u0027int\u0027",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrorsAndWarnings\\Program.cs",
+      "line_number": 1
+    },
+    {
+      "type": 0,
+      "code": "CS0029",
+      "message": "Cannot implicitly convert type \u0027int\u0027 to \u0027string\u0027",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrorsAndWarnings\\Program.cs",
+      "line_number": 2
+    },
+    {
+      "type": 1,
+      "code": "CS8600",
+      "message": "Converting null literal or possible null value to non-nullable type.",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrorsAndWarnings\\Program.cs",
+      "line_number": 3
+    },
+    {
+      "type": 1,
+      "code": "CS0219",
+      "message": "The variable \u0027firstAndSecondWarning\u0027 is assigned but its value is never used",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrorsAndWarnings\\Program.cs",
+      "line_number": 3
+    }
+  ]
+}

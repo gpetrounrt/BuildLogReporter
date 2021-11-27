@@ -17,6 +17,8 @@
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)</IntermediateOutputPath>
     <TargetFrameworkMonikerAssemblyAttributesPath>$(IntermediateOutputPath)$(TargetFrameworkName)\AssemblyAttributes.cs</TargetFrameworkMonikerAssemblyAttributesPath>
     <OutputPath>$(BuiltPath)$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+    <IsTestProject>false</IsTestProject>
+    <IsTestProject Condition="$(MSBuildProjectName.EndsWith('Tests'))">true</IsTestProject>
     <IsTestSupportProject>false</IsTestSupportProject>
     <IsTestSupportProject Condition="$(MSBuildProjectName.StartsWith('ProjectWith'))">true</IsTestSupportProject>
   </PropertyGroup>
@@ -48,6 +50,19 @@
   <!-- Items used only by the test projects that are not for test support. -->
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' And '$(IsTestSupportProject)' == 'false' ">
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)tests\CodeAnalysis.NetAnalyzers.globalconfig" />
+    <PackageReference Include="coverlet.collector" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="6.2.0" />
+    <PackageReference Include="JunitXml.TestLogger" Version="3.0.98" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

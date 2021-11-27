@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System.Xml;
+using System.Xml.Serialization;
 using BuildLogReporter.Processors;
 
 namespace BuildLogReporter.Reporters
@@ -11,9 +12,11 @@ namespace BuildLogReporter.Reporters
 
         public override string GetReportAsString(ProcessedLogResult processedLogResult)
         {
-            var xmlSerializer = new XmlSerializer(typeof(ProcessedLogResult));
+            var xmlWriterSettings = new XmlWriterSettings() { Indent = true };
             using var stringWriter = new Utf8StringWriter();
-            xmlSerializer.Serialize(stringWriter, processedLogResult);
+            using var xmlWriter = XmlWriter.Create(stringWriter, xmlWriterSettings);
+            var xmlSerializer = new XmlSerializer(typeof(ProcessedLogResult));
+            xmlSerializer.Serialize(xmlWriter, processedLogResult);
 
             return stringWriter.ToString();
         }

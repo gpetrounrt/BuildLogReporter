@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProcessedLogResult ErrorCount="2" WarningCount="0">
+  <LogEntries>
+    <LogEntry Type="Error" Code="CS0029" Message="Cannot implicitly convert type 'string' to 'int'" FilePath="\TestSupportProjects\ProjectWithErrors\Program.cs" LineNumber="1" />
+    <LogEntry Type="Error" Code="CS0029" Message="Cannot implicitly convert type 'int' to 'string'" FilePath="\TestSupportProjects\ProjectWithErrors\Program.cs" LineNumber="2" />
+  </LogEntries>
+</ProcessedLogResult>

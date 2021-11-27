@@ -24,64 +24,14 @@ namespace BuildLogReporter.Execution
             nameof(ReportType.Xml)
         };
 
-        public int ProcessLogFile(
+        public int ExportReports(
             string logPath,
             string reportPath,
             string reportTypes,
+            ProcessedLogResult processedLogResult,
             bool verbose)
         {
-            ArgumentNullException.ThrowIfNull(logPath);
-            ArgumentNullException.ThrowIfNull(reportPath);
             ArgumentNullException.ThrowIfNull(reportTypes);
-
-            LogProcessor logProcessor;
-            if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
-            {
-                logProcessor = new BinaryLogProcessor(_fileSystem);
-            }
-            else if (logPath.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
-            {
-                logProcessor = new TextLogProcessor(_fileSystem);
-            }
-            else
-            {
-                Console.Error.WriteLine("Could not initialize log processor.");
-                return 1;
-            }
-
-            (bool success, ProcessedLogResult processedLogResult) = logProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
-            if (!success)
-            {
-                return 1;
-            }
-
-            if (verbose)
-            {
-                Console.WriteLine($"Found {processedLogResult.ErrorCount} error(s) and {processedLogResult.WarningCount} warning(s).");
-            }
-
-            try
-            {
-                if (!_fileSystem.Directory.Exists(reportPath))
-                {
-                    if (verbose)
-                    {
-                        Console.WriteLine($"Creating '{reportPath}'...");
-                    }
-
-                    _fileSystem.Directory.CreateDirectory(reportPath);
-
-                    if (verbose)
-                    {
-                        Console.WriteLine("Created report directory.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine($"Could not create {reportPath}.{Environment.NewLine}{ex}");
-                return 1;
-            }
 
             var reportTypesAsArray = reportTypes.Split(';');
             foreach (var reportType in reportTypesAsArray)
@@ -150,6 +100,73 @@ namespace BuildLogReporter.Execution
             return 0;
         }
 
+        public int ProcessLogFileAndExportReports(
+            string logPath,
+            string reportPath,
+            string reportTypes,
+            bool verbose)
+        {
+            ArgumentNullException.ThrowIfNull(logPath);
+            ArgumentNullException.ThrowIfNull(reportPath);
+            ArgumentNullException.ThrowIfNull(reportTypes);
+
+            LogProcessor logProcessor;
+            if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
+            {
+                logProcessor = new BinaryLogProcessor(_fileSystem);
+            }
+            else if (logPath.EndsWith(".log", StringComparison.OrdinalIgnoreCase))
+            {
+                logProcessor = new TextLogProcessor(_fileSystem);
+            }
+            else
+            {
+                Console.Error.WriteLine("Could not initialize log processor.");
+                return 1;
+            }
+
+            (bool success, ProcessedLogResult processedLogResult) = logProcessor.CountAndGetErrorsAndWarnings(logPath, verbose);
+            if (!success)
+            {
+                return 1;
+            }
+
+            if (verbose)
+            {
+                Console.WriteLine($"Found {processedLogResult.ErrorCount} error(s) and {processedLogResult.WarningCount} warning(s).");
+            }
+
+            try
+            {
+                if (!_fileSystem.Directory.Exists(reportPath))
+                {
+                    if (verbose)
+                    {
+                        Console.WriteLine($"Creating '{reportPath}'...");
+                    }
+
+                    _fileSystem.Directory.CreateDirectory(reportPath);
+
+                    if (verbose)
+                    {
+                        Console.WriteLine("Created report directory.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Could not create {reportPath}.{Environment.NewLine}{ex}");
+                return 1;
+            }
+
+            return ExportReports(
+                logPath,
+                reportPath,
+                reportTypes,
+                processedLogResult,
+                verbose);
+        }
+
         public int ProcessFile(
             string logPath,
             string reportPath,
@@ -163,7 +180,7 @@ namespace BuildLogReporter.Execution
                 int result = -1;
                 executionTimer.Measure(() =>
                 {
-                    result = ProcessLogFile(logPath, reportPath, reportTypes, verbose);
+                    result = ProcessLogFileAndExportReports(logPath, reportPath, reportTypes, verbose);
                 });
                 Console.WriteLine($"Completed processing in {executionTimer.GetElapsedTimeAsString()}.");
 
@@ -171,7 +188,7 @@ namespace BuildLogReporter.Execution
             }
             else
             {
-                return ProcessLogFile(logPath, reportPath, reportTypes, verbose);
+                return ProcessLogFileAndExportReports(logPath, reportPath, reportTypes, verbose);
             }
         }
 
@@ -224,7 +241,7 @@ namespace BuildLogReporter.Execution
             });
 
             var reportTypesOption = new Option<string>(
-                new[] { "--reportTypes", "-rt" },
+                new[] { "--report-types", "-rt" },
                 () => "Html",
                 "The type of reports to generate");
             reportTypesOption.AddValidator(optionResult =>
