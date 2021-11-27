@@ -38,7 +38,11 @@ namespace BuildLogReporter.Reporters
 
         private const string LeftSideText = "Build";
 
+        private const string ExtensionValue = "svg";
+
         private readonly string[] _possibleFonts = new string[] { "Verdana", "Geneva", "sans-serif" };
+
+        public override string Extension => ExtensionValue;
 
         public override string GetReportAsString(ProcessedLogResult processedLogResult)
         {

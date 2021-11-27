@@ -1,11 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.CommandLine;
+﻿using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using System.Reflection;
 using BuildLogReporter.Diagnostics;
 using BuildLogReporter.Processors;
+using BuildLogReporter.Reporters;
 
 namespace BuildLogReporter.Execution
 {
@@ -15,9 +15,19 @@ namespace BuildLogReporter.Execution
 
         private readonly RootCommand _rootCommand;
 
+        private readonly HashSet<string> _availableReportTypes = new HashSet<string>()
+        {
+            nameof(ReportType.Badge),
+            nameof(ReportType.Html),
+            nameof(ReportType.Json),
+            nameof(ReportType.Markdown),
+            nameof(ReportType.Xml)
+        };
+
         public int ProcessLogFile(
             string logPath,
             string reportPath,
+            string reportTypes,
             bool verbose)
         {
             LogProcessor logProcessor;
@@ -69,13 +79,77 @@ namespace BuildLogReporter.Execution
                 return 1;
             }
 
-            // TODO: Implement reporters.
+            var reportTypesAsArray = reportTypes.Split(';');
+            foreach (var reportType in reportTypesAsArray)
+            {
+                Reporter reporter;
+                switch (reportType)
+                {
+                    case nameof(ReportType.Badge):
+                        reporter = new BadgeReporter();
+                        break;
+                    case nameof(ReportType.Html):
+                        reporter = new HtmlReporter(logPath);
+                        break;
+                    case nameof(ReportType.Json):
+                        reporter = new JsonReporter();
+                        break;
+                    case nameof(ReportType.Markdown):
+                        reporter = new MarkdownReporter();
+                        break;
+                    case nameof(ReportType.Xml):
+                        reporter = new XmlReporter();
+                        break;
+                    default:
+                        Console.Error.WriteLine($"Could not find reporter for {reportType}.");
+                        return 1;
+                }
+
+                string reportAsString = string.Empty;
+                if (verbose)
+                {
+                    Console.WriteLine($"Generating {reportType} report...");
+                    var executionTimer = new ExecutionTimer();
+                    executionTimer.Measure(() =>
+                    {
+                        reportAsString = reporter.GetReportAsString(processedLogResult);
+                    });
+                    Console.WriteLine($"Generated report in {executionTimer.GetElapsedTimeAsString()}.");
+                }
+                else
+                {
+                    reportAsString = reporter.GetReportAsString(processedLogResult);
+                }
+
+                if (verbose)
+                {
+                    Console.WriteLine($"Saving report to {reportPath}.");
+                }
+
+                try
+                {
+                    _fileSystem.File.WriteAllText(Path.Combine(reportPath, $"BuildLogReport.{reporter.Extension}"), reportAsString);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Could not save report to file.{Environment.NewLine}{ex}");
+
+                    return 1;
+                }
+
+                if (verbose)
+                {
+                    Console.WriteLine($"Saved report.");
+                }
+            }
+
             return 0;
         }
 
         public int ProcessFile(
             string logPath,
             string reportPath,
+            string reportTypes,
             bool verbose)
         {
             if (verbose)
@@ -85,7 +159,7 @@ namespace BuildLogReporter.Execution
                 int result = -1;
                 executionTimer.Measure(() =>
                 {
-                    result = ProcessLogFile(logPath, reportPath, verbose);
+                    result = ProcessLogFile(logPath, reportPath, reportTypes, verbose);
                 });
                 Console.WriteLine($"Completed processing in {executionTimer.GetElapsedTimeAsString()}.");
 
@@ -93,7 +167,7 @@ namespace BuildLogReporter.Execution
             }
             else
             {
-                return ProcessLogFile(logPath, reportPath, verbose);
+                return ProcessLogFile(logPath, reportPath, reportTypes, verbose);
             }
         }
 
@@ -145,10 +219,46 @@ namespace BuildLogReporter.Execution
                 return null;
             });
 
+            var reportTypesOption = new Option<string>(
+                new[] { "--reportTypes", "-rt" },
+                () => "Html",
+                "The type of reports to generate");
+            reportTypesOption.AddValidator(optionResult =>
+            {
+                var reportTypes = optionResult.GetValueOrDefault<string>();
+                if (string.IsNullOrWhiteSpace(reportTypes))
+                {
+                    return $"'{optionResult.Option.Name}' cannot be null or empty.";
+                }
+
+                var reportTypesAsArray = reportTypes.Split(';');
+                foreach (var reportType in reportTypesAsArray)
+                {
+                    if (!_availableReportTypes.Contains(reportType))
+                    {
+                        return $"'{reportType}' is an invalid value.{Environment.NewLine}Possible values: {string.Join(", ", _availableReportTypes)}";
+                    }
+                }
+
+                var uniqueReportTypes = new HashSet<string>();
+                foreach (string reportType in reportTypesAsArray)
+                {
+                    if (uniqueReportTypes.Contains(reportType))
+                    {
+                        return $"'{reportType}' is already selected in '{optionResult.Option.Name}'.";
+                    }
+
+                    uniqueReportTypes.Add(reportType);
+                }
+
+                return null;
+            });
+
             _rootCommand = new RootCommand
             {
                 logPathArgument,
                 reportPathArgument,
+                reportTypesOption,
                 new Option<bool>(
                     new[] { "--verbose", "-v" },
                     () => false,
@@ -161,7 +271,7 @@ namespace BuildLogReporter.Execution
 
             _rootCommand.Description = $"Build Log Reporter {versionAsString}";
 
-            _rootCommand.Handler = CommandHandler.Create<string, string, bool>(ProcessFile);
+            _rootCommand.Handler = CommandHandler.Create<string, string, string, bool>(ProcessFile);
         }
 
         public ProgramExecutor()
