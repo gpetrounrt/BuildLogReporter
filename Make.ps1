@@ -2,7 +2,16 @@
 [CmdletBinding()]
 Param(
     [Parameter(Position = 1)]
-    [ValidateSet("clean", "build", "unit-test", "integration-test", "coverage", "pack", "help")]
+    [ValidateSet(
+        "clean",
+        "build",
+        "unit-test",
+        "integration-test",
+        "coverage",
+        "pack",
+        "install",
+        "report",
+        "help")]
     [string] $action = "")
 
 # Establish and enforce coding rules in expressions, scripts and script blocks.
@@ -11,6 +20,8 @@ $errorActionPreference = "Stop"
 
 Set-Variable SolutionPath -Option Constant -Value "$PSScriptRoot\BuildLogReporter.sln" -Force -ErrorAction SilentlyContinue
 Set-Variable ArtifactsPath -Option Constant -Value "$PSScriptRoot\artifacts" -Force -ErrorAction SilentlyContinue
+Set-Variable ReportPath -Option Constant -Value "$ArtifactsPath\Report" -Force -ErrorAction SilentlyContinue
+Set-Variable BinlogPath -Option Constant -Value "$ArtifactsPath\Built\Release\BuildLogReporter\Output.binlog" -Force -ErrorAction SilentlyContinue
 Set-Variable TestCoveragePath -Option Constant -Value "$ArtifactsPath\Coverage" -Force -ErrorAction SilentlyContinue
 Set-Variable TestCoverageResultsPath -Option Constant -Value "$TestCoveragePath\Results" -Force -ErrorAction SilentlyContinue
 Set-Variable TestSummaryPath -Option Constant -Value "$ArtifactsPath\TestSummary" -Force -ErrorAction SilentlyContinue
@@ -29,9 +40,7 @@ function Clean() {
 }
 
 function Build() {
-    $binlogPath = "$ArtifactsPath\Built\Release\BuildLogReporter\Output.binlog"
-
-    & dotnet build $SolutionPath --configuration Release -bl:$binlogPath
+    & dotnet build $SolutionPath --configuration Release -bl:$BinlogPath
 }
 
 function Test([string] $testType) {
@@ -61,22 +70,57 @@ function CreateCoverageReport() {
         -title:"Build Log Reporter"
 }
 
+function Pack() {
+    & dotnet pack $SolutionPath --configuration Release --no-build
+}
+
+function Install() {
+    $isBuildLogReporterInstalled = $false
+    if (Test-Path $ToolsPath) {
+        $tools = dotnet tool list --tool-path $ToolsPath
+        $isBuildLogReporterInstalled = $tools -Like '*build-log-reporter*'
+    }
+
+    if ($isBuildLogReporterInstalled) {
+        & dotnet tool uninstall --tool-path $ToolsPath BuildLogReporter
+    }
+
+    & dotnet tool install --add-source "$ArtifactsPath\Package" `
+        --tool-path $ToolsPath `
+        --prerelease `
+        BuildLogReporter
+}
+
+function Report() {
+    & "$ToolsPath\build-log-reporter.exe" "--report-types" "Badge;Html;Json;Markdown;Xml" $BinlogPath $ReportPath
+
+    $report = Get-Content "$ReportPath\BuildLogReport.json" | ConvertFrom-Json
+    if ($report.error_count -gt 0 -or $report.warning_count -gt 0) {
+
+        # TODO: Add GitHub PR comment.
+    } else {
+        Write-Host "The build completed without errors or warnings."
+    }
+}
+
 function DisplayHelp() {
 
-    $actions = @(
+    $availableActions = @(
         @{ Name = "clean"; Description="Cleans the solution artifacts" },
         @{ Name = "build"; Description="Builds the solution" },
         @{ Name = "unit-test"; Description="Runs the unit tests" },
         @{ Name = "integration-test"; Description="Runs the integration tests" },
         @{ Name = "coverage"; Description="Generates the coverage reports" },
-        @{ Name = "pack"; Description="Generates the NuGet package" }
+        @{ Name = "pack"; Description="Generates the NuGet package" },
+        @{ Name = "install"; Description="Installs the NuGet package" },
+        @{ Name = "report"; Description="Generates the build log reports" },
         @{ Name = "help"; Description="Displays this content" })
 
     Write-Host
     Write-Host "Usage: .\Make.ps1 [action]"
     Write-Host
     Write-Host "Available actions:"
-    $actions | % { [PSCustomObject]$_ } | Format-Table -HideTableHeaders
+    $availableActions | % { [PSCustomObject]$_ } | Format-Table -HideTableHeaders
 }
 
 switch -wildcard ($action) {
@@ -106,7 +150,17 @@ switch -wildcard ($action) {
     }
 
     "pack" {
-        & dotnet pack $SolutionPath --configuration Release --no-build
+        Pack
+        break
+    }
+
+    "install" {
+        Install
+        break
+    }
+
+    "report" {
+        Report
         break
     }
 
