@@ -103,7 +103,7 @@ namespace BuildLogReporter.Processors
         {
             if (verbose)
             {
-                Console.WriteLine($"Starting extraction of log entries...");
+                Console.WriteLine("Starting extraction of log entries...");
                 var executionTimer = new ExecutionTimer();
                 (bool Success, ProcessedLogResult ProcessedLogResult) result = (false, new ProcessedLogResult(0, 0, new List<LogEntry>().AsReadOnly()));
                 executionTimer.Measure(() =>

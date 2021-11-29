@@ -21,8 +21,20 @@
     <IsTestSupportProject Condition="$(MSBuildProjectName.StartsWith('ProjectWith'))">true</IsTestSupportProject>
   </PropertyGroup>
 
+  <!-- Properties used by all projects except the test support ones. -->
+  <PropertyGroup Condition=" '$(IsTestSupportProject)' == 'false' ">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>6.0</AnalysisLevel>
+  </PropertyGroup>
+
+  <!-- Items used by the non-test projects. -->
+  <ItemGroup Condition=" '$(IsTestProject)' == 'false' And '$(IsTestSupportProject)' == 'false' ">
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)src\CodeAnalysis.NetAnalyzers.globalconfig" />
+  </ItemGroup>
+
   <!-- Items used by all projects except the test support ones. -->
   <ItemGroup Condition=" '$(IsTestSupportProject)' == 'false' ">
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.NetAnalyzers.globalconfig" />
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.StyleCop.globalconfig" />
     <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.244">
       <PrivateAssets>all</PrivateAssets>
@@ -31,6 +43,11 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <!-- Items used only by the test projects that are not for test support. -->
+  <ItemGroup Condition=" '$(IsTestProject)' == 'true' And '$(IsTestSupportProject)' == 'false' ">
+    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)tests\CodeAnalysis.NetAnalyzers.globalconfig" />
   </ItemGroup>
 
 </Project>

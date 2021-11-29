@@ -30,6 +30,10 @@ namespace BuildLogReporter.Execution
             string reportTypes,
             bool verbose)
         {
+            ArgumentNullException.ThrowIfNull(logPath);
+            ArgumentNullException.ThrowIfNull(reportPath);
+            ArgumentNullException.ThrowIfNull(reportTypes);
+
             LogProcessor logProcessor;
             if (logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase))
             {
@@ -69,7 +73,7 @@ namespace BuildLogReporter.Execution
 
                     if (verbose)
                     {
-                        Console.WriteLine($"Created report directory.");
+                        Console.WriteLine("Created report directory.");
                     }
                 }
             }
@@ -139,7 +143,7 @@ namespace BuildLogReporter.Execution
 
                 if (verbose)
                 {
-                    Console.WriteLine($"Saved report.");
+                    Console.WriteLine("Saved report.");
                 }
             }
 

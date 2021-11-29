@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using BuildLogReporter.Processors;
 
 namespace BuildLogReporter.Reporters
@@ -13,14 +14,14 @@ namespace BuildLogReporter.Reporters
         {
             var reportStringBuilder = new StringBuilder();
             reportStringBuilder
-                .AppendLine($"Errors: {processedLogResult.ErrorCount}, Warnings: {processedLogResult.WarningCount}")
+                .AppendLine(CultureInfo.InvariantCulture, $"Errors: {processedLogResult.ErrorCount}, Warnings: {processedLogResult.WarningCount}")
                 .AppendLine()
-                .AppendLine($"| Type | Code | Message | File path | Line number |")
-                .AppendLine($"|:---|:---|:---|:---|:---|");
+                .AppendLine("| Type | Code | Message | File path | Line number |")
+                .AppendLine("|:---|:---|:---|:---|:---|");
 
             foreach (var logEntry in processedLogResult.LogEntries)
             {
-                reportStringBuilder.AppendLine($"| {logEntry.Type} | {logEntry.Code} | {logEntry.Message} | {logEntry.FilePath} | {logEntry.LineNumber} |");
+                reportStringBuilder.AppendLine(CultureInfo.InvariantCulture, $"| {logEntry.Type} | {logEntry.Code} | {logEntry.Message} | {logEntry.FilePath} | {logEntry.LineNumber} |");
             }
 
             return reportStringBuilder.ToString();
