@@ -12,9 +12,12 @@ namespace BuildLogReporter.Diagnostics
 
         public void Measure(Action action)
         {
+            ArgumentNullException.ThrowIfNull(action);
+
             _stopwatch.Start();
             action();
             _stopwatch.Stop();
+
             TotalMilliseconds = _stopwatch.Elapsed.TotalMilliseconds;
         }
 

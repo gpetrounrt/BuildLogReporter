@@ -79,6 +79,8 @@ Line Number: {LineNumber}";
 
         public void WriteXml(XmlWriter writer)
         {
+            ArgumentNullException.ThrowIfNull(writer);
+
             writer.WriteStartElement(nameof(LogEntry));
             writer.WriteAttributeString(nameof(Type), Type.ToString());
             writer.WriteAttributeString(nameof(Code), Code);

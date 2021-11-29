@@ -17,7 +17,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(Array.Empty<string>());
+            var result = await programExecutor.ProcessFileAsync(Array.Empty<string>()).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -34,7 +34,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { string.Empty, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { string.Empty, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -51,7 +51,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { @"C:\temp\build.invalid", @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { @"C:\temp\build.invalid", @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -69,7 +69,7 @@ namespace BuildLogReporter.UnitTests.Execution
             const string invalidPath = @"C:\temp\build.binlog";
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { invalidPath, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { invalidPath, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -89,7 +89,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -109,7 +109,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { logPath, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(0);
@@ -129,7 +129,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(1);
@@ -150,7 +150,7 @@ namespace BuildLogReporter.UnitTests.Execution
             using var consoleRecorder = new ConsoleRecorder();
 
             // Act
-            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" });
+            var result = await programExecutor.ProcessFileAsync(new string[] { "--verbose", logPath, @"C:\temp\out" }).ConfigureAwait(false);
 
             // Assert
             result.Should().Be(0);

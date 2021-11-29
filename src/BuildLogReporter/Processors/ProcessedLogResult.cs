@@ -29,6 +29,8 @@ namespace BuildLogReporter.Processors
 
         public void WriteXml(XmlWriter writer)
         {
+            ArgumentNullException.ThrowIfNull(writer);
+
             writer.WriteAttributeString(nameof(ErrorCount), ErrorCount.ToString(CultureInfo.InvariantCulture));
             writer.WriteAttributeString(nameof(WarningCount), WarningCount.ToString(CultureInfo.InvariantCulture));
             writer.WriteStartElement(nameof(LogEntries));

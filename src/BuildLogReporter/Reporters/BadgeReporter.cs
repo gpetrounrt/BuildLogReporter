@@ -85,13 +85,13 @@ namespace BuildLogReporter.Reporters
             var buildRectangle = TextMeasurer.Measure(LeftSideText, new RendererOptions(font));
             var errorsAndWarningsRectangle = TextMeasurer.Measure(errorsAndWarningsText, new RendererOptions(font));
 
-            var buildRectangleWidth = buildRectangle.Width + 1;
-            var errorsAndWarningsRectangleWidth = errorsAndWarningsRectangle.Width + 1;
+            var buildRectangleWidth = buildRectangle.Width + 3;
+            var errorsAndWarningsRectangleWidth = errorsAndWarningsRectangle.Width + 3;
 
             var badge = string.Format(
                 CultureInfo.InvariantCulture,
                 PlasticBadgeTemplate,
-                buildRectangleWidth + errorsAndWarningsRectangleWidth,
+                buildRectangleWidth + errorsAndWarningsRectangleWidth + 1,
                 buildRectangleWidth + 1,
                 errorsAndWarningsRectangleWidth + 1,
                 (buildRectangleWidth / 2) + 1,
