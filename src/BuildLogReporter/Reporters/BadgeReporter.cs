@@ -7,8 +7,7 @@ namespace BuildLogReporter.Reporters
 {
     public sealed class BadgeReporter : Reporter
     {
-        private const string PlasticBadgeTemplate = @"
-<svg xmlns=""http://www.w3.org/2000/svg"" width=""{0}"" height=""20"">
+        private const string PlasticBadgeTemplate = @"<svg xmlns=""http://www.w3.org/2000/svg"" width=""{0}"" height=""20"">
   <linearGradient id=""b"" x2=""0"" y2=""100%"">
     <stop offset=""0"" stop-color=""#FFFFFF"" stop-opacity=""0.7"" />
     <stop offset=""0.1"" stop-color=""#AAAAAA"" stop-opacity=""0.1"" />

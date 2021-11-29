@@ -1,4 +1,4 @@
-﻿namespace BuildLogReporter.UnitTests.Diagnostics
+﻿namespace BuildLogReporter.Tests.Common.Diagnostics
 {
     public sealed class ConsoleRecorder : IDisposable
     {

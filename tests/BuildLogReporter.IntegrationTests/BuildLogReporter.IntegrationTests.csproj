@@ -6,12 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
-    <PackageReference Include="Moq" Version="4.16.1" />
-    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.47" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\BuildLogReporter\BuildLogReporter.csproj" />
     <ProjectReference Include="..\BuildLogReporter.Tests.Common\BuildLogReporter.Tests.Common.csproj" />
   </ItemGroup>

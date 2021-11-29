@@ -1,0 +1,20 @@
+{
+  "error_count": 2,
+  "warning_count": 0,
+  "log_entries": [
+    {
+      "type": 0,
+      "code": "CS0029",
+      "message": "Cannot implicitly convert type \u0027string\u0027 to \u0027int\u0027",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrors\\Program.cs",
+      "line_number": 1
+    },
+    {
+      "type": 0,
+      "code": "CS0029",
+      "message": "Cannot implicitly convert type \u0027int\u0027 to \u0027string\u0027",
+      "file_path": "\\TestSupportProjects\\ProjectWithErrors\\Program.cs",
+      "line_number": 2
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "error_count": 0,
+  "warning_count": 2,
+  "log_entries": [
+    {
+      "type": 1,
+      "code": "CS8600",
+      "message": "Converting null literal or possible null value to non-nullable type.",
+      "file_path": "\\TestSupportProjects\\ProjectWithWarnings\\Program.cs",
+      "line_number": 1
+    },
+    {
+      "type": 1,
+      "code": "CS0219",
+      "message": "The variable \u0027firstAndSecondWarning\u0027 is assigned but its value is never used",
+      "file_path": "\\TestSupportProjects\\ProjectWithWarnings\\Program.cs",
+      "line_number": 1
+    }
+  ]
+}

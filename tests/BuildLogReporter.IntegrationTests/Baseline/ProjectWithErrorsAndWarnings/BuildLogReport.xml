@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProcessedLogResult ErrorCount="2" WarningCount="2">
+  <LogEntries>
+    <LogEntry Type="Error" Code="CS0029" Message="Cannot implicitly convert type 'string' to 'int'" FilePath="\TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs" LineNumber="1" />
+    <LogEntry Type="Error" Code="CS0029" Message="Cannot implicitly convert type 'int' to 'string'" FilePath="\TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs" LineNumber="2" />
+    <LogEntry Type="Warning" Code="CS8600" Message="Converting null literal or possible null value to non-nullable type." FilePath="\TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs" LineNumber="3" />
+    <LogEntry Type="Warning" Code="CS0219" Message="The variable 'firstAndSecondWarning' is assigned but its value is never used" FilePath="\TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs" LineNumber="3" />
+  </LogEntries>
+</ProcessedLogResult>

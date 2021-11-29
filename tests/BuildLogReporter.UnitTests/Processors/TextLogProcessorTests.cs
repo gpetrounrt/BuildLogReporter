@@ -1,7 +1,7 @@
 ﻿using BuildLogReporter.Processors;
-using BuildLogReporter.UnitTests.Diagnostics;
+using BuildLogReporter.Tests.Common.Diagnostics;
+using BuildLogReporter.Tests.Common.Helpers;
 using BuildLogReporter.UnitTests.Fixtures;
-using BuildLogReporter.UnitTests.Helpers;
 using FluentAssertions;
 using Xunit;
 

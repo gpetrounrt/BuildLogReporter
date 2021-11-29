@@ -1,0 +1,53 @@
+Starting processing of '\ProjectWithErrorsAndWarnings\output.binlog'...
+Starting extraction of log entries...
+Opening binary log file...
+Opened binary log file.
+Processing records...
+Found error record.
+Type: Error
+Code: CS0029
+Message: Cannot implicitly convert type 'string' to 'int'
+File path: \TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs
+Line Number: 1
+Found error record.
+Type: Error
+Code: CS0029
+Message: Cannot implicitly convert type 'int' to 'string'
+File path: \TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs
+Line Number: 2
+Found warning record.
+Type: Warning
+Code: CS8600
+Message: Converting null literal or possible null value to non-nullable type.
+File path: \TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs
+Line Number: 3
+Found warning record.
+Type: Warning
+Code: CS0219
+Message: The variable 'firstAndSecondWarning' is assigned but its value is never used
+File path: \TestSupportProjects\ProjectWithErrorsAndWarnings\Program.cs
+Line Number: 3
+Processed N record(s).
+Completed extraction in elapsed time.
+Found 2 error(s) and 2 warning(s).
+Generating Badge report...
+Generated report in elapsed time.
+Saving report to \ProjectWithErrorsAndWarnings.
+Saved report.
+Generating Html report...
+Generated report in elapsed time.
+Saving report to \ProjectWithErrorsAndWarnings.
+Saved report.
+Generating Json report...
+Generated report in elapsed time.
+Saving report to \ProjectWithErrorsAndWarnings.
+Saved report.
+Generating Markdown report...
+Generated report in elapsed time.
+Saving report to \ProjectWithErrorsAndWarnings.
+Saved report.
+Generating Xml report...
+Generated report in elapsed time.
+Saving report to \ProjectWithErrorsAndWarnings.
+Saved report.
+Completed processing in elapsed time.

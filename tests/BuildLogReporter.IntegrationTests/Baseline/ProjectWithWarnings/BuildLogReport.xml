@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProcessedLogResult ErrorCount="0" WarningCount="2">
+  <LogEntries>
+    <LogEntry Type="Warning" Code="CS8600" Message="Converting null literal or possible null value to non-nullable type." FilePath="\TestSupportProjects\ProjectWithWarnings\Program.cs" LineNumber="1" />
+    <LogEntry Type="Warning" Code="CS0219" Message="The variable 'firstAndSecondWarning' is assigned but its value is never used" FilePath="\TestSupportProjects\ProjectWithWarnings\Program.cs" LineNumber="1" />
+  </LogEntries>
+</ProcessedLogResult>

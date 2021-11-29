@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace BuildLogReporter.UnitTests.Helpers
+namespace BuildLogReporter.Tests.Common.Helpers
 {
     public static class LogProcessorHelper
     {
@@ -16,7 +16,7 @@ namespace BuildLogReporter.UnitTests.Helpers
         {
             ArgumentNullException.ThrowIfNull(logPath);
 
-            string logCommand = logPath.EndsWith(".binlog", System.StringComparison.OrdinalIgnoreCase) ? "-bl:" : "-fl -flp:logfile=";
+            string logCommand = logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase) ? "-bl:" : "-fl -flp:logfile=";
 
             var processStartInfo = new ProcessStartInfo
             {
