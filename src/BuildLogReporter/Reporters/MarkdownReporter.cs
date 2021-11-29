@@ -5,6 +5,10 @@ namespace BuildLogReporter.Reporters
 {
     public sealed class MarkdownReporter : Reporter
     {
+        private const string ExtensionValue = "md";
+
+        public override string Extension => ExtensionValue;
+
         public override string GetReportAsString(ProcessedLogResult processedLogResult)
         {
             var reportStringBuilder = new StringBuilder();
