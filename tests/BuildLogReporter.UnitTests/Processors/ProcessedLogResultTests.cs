@@ -67,13 +67,13 @@ namespace BuildLogReporter.UnitTests.Processors
                     "Code",
                     "Message",
                     "FilePath",
-                    1),
+                    2),
                 new LogEntry(
                     LogEntryType.Warning,
                     "Code",
                     "Message",
                     "FilePath",
-                    1),
+                    3),
             }
             .AsReadOnly();
 
