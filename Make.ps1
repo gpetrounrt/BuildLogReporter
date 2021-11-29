@@ -28,6 +28,12 @@ function Clean() {
     DeleteDirectory $ArtifactsPath
 }
 
+function Build() {
+    $binlogPath = "$ArtifactsPath\Built\Release\BuildLogReporter\Output.binlog"
+
+    & dotnet build $SolutionPath --configuration Release -bl:$binlogPath
+}
+
 function CreateCoverageReport() {
     $isReportGeneratorInstalled = $false
     if (Test-Path $ToolsPath) {
@@ -64,7 +70,7 @@ switch -wildcard ($action) {
     }
 
     "build" {
-        & dotnet build $SolutionPath --configuration Release
+        Build
         break
     }
 
