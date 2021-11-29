@@ -57,9 +57,12 @@ function DisplayHelp() {
     Write-Host "Usage: .\Make.ps1 [action]"
     Write-Host
     Write-Host "Available actions:"
-    Write-Host "build`tbuilds the solution"
-    Write-Host "clean`tcleans the solution output"
-    Write-Host "help`tdisplays this content"
+    Write-Host "clean`t`tCleans the solution artifacts"
+    Write-Host "build`t`tBuilds the solution"
+    Write-Host "unit-test`tRuns the unit tests"
+    Write-Host "coverage`tGenerates the coverage reports"
+    Write-Host "pack`t`tGenerates the NuGet package"
+    Write-Host "help`t`tDisplays this content"
     Write-Host
 }
 
