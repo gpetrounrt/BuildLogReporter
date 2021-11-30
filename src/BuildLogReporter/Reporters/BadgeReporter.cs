@@ -22,10 +22,10 @@ namespace BuildLogReporter.Reporters
     <path fill=""url(#b)"" d=""M0 0h{0}v20H0z"" />
   </g>
   <g fill=""#FFFFFF"" text-anchor=""middle"" font-family=""Verdana,Geneva,sans-serif"" font-size=""11"">
-    <text x=""{3}"" y=""14"" fill=""#010101"" fill-opacity=""0.3"">{5}</text>
-    <text x=""{3}"" y=""13"">{5}</text>
-    <text x=""{4}"" y=""14"" fill=""#010101"" fill-opacity=""0.3"">{6}</text>
-    <text x=""{4}"" y=""13"">{6}</text>
+    <text x=""{3}"" y=""15"" fill=""#010101"" fill-opacity=""0.3"">{5}</text>
+    <text x=""{3}"" y=""14"">{5}</text>
+    <text x=""{4}"" y=""15"" fill=""#010101"" fill-opacity=""0.3"">{6}</text>
+    <text x=""{4}"" y=""14"">{6}</text>
   </g>
 </svg>";
 
