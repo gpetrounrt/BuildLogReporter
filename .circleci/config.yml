@@ -1,0 +1,70 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.4.1
+
+jobs:
+  make:
+    executor:
+      name: win/default
+    steps:
+      - checkout
+      - restore_cache:
+          key:
+            "dotnet-packages\
+                -{{ checksum \"Directory.Build.props\" }}\
+                -{{ checksum \"src/BuildLogReporter/BuildLogReporter.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.IntegrationTests/BuildLogReporter.IntegrationTests.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.Tests.Common/BuildLogReporter.Tests.Common.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.UnitTests/BuildLogReporter.UnitTests.csproj\" }}"
+      - run:
+          name: "Install .NET 6.0"
+          command: |
+            dotnet --list-sdks
+            $webClient = New-Object System.Net.WebClient
+            $webClient.DownloadFile("https://download.visualstudio.microsoft.com/download/pr/0f71eaf1-ce85-480b-8e11-c3e2725b763a/9044bfd1c453e2215b6f9a0c224d20fe/dotnet-sdk-6.0.100-win-x64.exe", 'dotnet-install.exe')
+            ./dotnet-install.exe /install /quiet /norestart
+      - run:
+          name: "Build solution"
+          command: ./Make.ps1 build
+      - save_cache:
+          paths:
+            - C:\Users\circleci\.nuget\packages
+          key:
+            "dotnet-packages\
+                -{{ checksum \"Directory.Build.props\" }}\
+                -{{ checksum \"src/BuildLogReporter/BuildLogReporter.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.IntegrationTests/BuildLogReporter.IntegrationTests.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.Tests.Common/BuildLogReporter.Tests.Common.csproj\" }}\
+                -{{ checksum \"tests/BuildLogReporter.UnitTests/BuildLogReporter.UnitTests.csproj\" }}"
+      - run:
+          name: "Run unit tests"
+          command: ./Make.ps1 unit-test
+      - store_test_results:
+          path: C:\Users\circleci\project\artifacts\TestSummary
+      - run:
+          name: "Run integration tests"
+          command: ./Make.ps1 integration-test
+      - store_test_results:
+          path: C:\Users\circleci\project\artifacts\TestSummary
+      - run:
+          name: "Generate coverage report"
+          command: ./Make.ps1 coverage
+      - store_artifacts:
+          path: C:\Users\circleci\project\artifacts\Coverage\Report
+      - run:
+          name: "Pack NuGet package"
+          command: ./Make.ps1 pack
+      - run:
+          name: "Install NuGet package"
+          command: ./Make.ps1 install
+      - run:
+          name: "Generate build log report"
+          command: ./Make.ps1 report
+      - store_artifacts:
+          path: C:\Users\circleci\project\artifacts\Report
+
+workflows:
+  continous:
+    jobs:
+      - make
