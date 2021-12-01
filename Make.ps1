@@ -18,6 +18,8 @@ Param(
 Set-StrictMode -Version Latest
 $errorActionPreference = "Stop"
 
+$env:DOTNET_CLI_TELEMETRY_OPTOUT = 1
+
 Set-Variable SolutionPath -Option Constant -Value "$PSScriptRoot\BuildLogReporter.sln" -Force -ErrorAction SilentlyContinue
 Set-Variable ArtifactsPath -Option Constant -Value "$PSScriptRoot\artifacts" -Force -ErrorAction SilentlyContinue
 Set-Variable ReportPath -Option Constant -Value "$ArtifactsPath\Report" -Force -ErrorAction SilentlyContinue
