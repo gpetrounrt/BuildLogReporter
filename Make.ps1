@@ -11,6 +11,7 @@ Param(
         "pack",
         "install",
         "report",
+        "all",
         "help")]
     [string] $action = "")
 
@@ -108,15 +109,16 @@ function Report() {
 function DisplayHelp() {
 
     $availableActions = @(
-        @{ Name = "clean"; Description="Cleans the solution artifacts" },
-        @{ Name = "build"; Description="Builds the solution" },
-        @{ Name = "unit-test"; Description="Runs the unit tests" },
-        @{ Name = "integration-test"; Description="Runs the integration tests" },
-        @{ Name = "coverage"; Description="Generates the coverage reports" },
-        @{ Name = "pack"; Description="Generates the NuGet package" },
-        @{ Name = "install"; Description="Installs the NuGet package" },
-        @{ Name = "report"; Description="Generates the build log reports" },
-        @{ Name = "help"; Description="Displays this content" })
+        @{ Name = "clean"; Description = "Cleans the solution artifacts" },
+        @{ Name = "build"; Description = "Builds the solution" },
+        @{ Name = "unit-test"; Description = "Runs the unit tests" },
+        @{ Name = "integration-test"; Description = "Runs the integration tests" },
+        @{ Name = "coverage"; Description = "Generates the coverage reports" },
+        @{ Name = "pack"; Description = "Generates the NuGet package" },
+        @{ Name = "install"; Description = "Installs the NuGet package" },
+        @{ Name = "report"; Description = "Generates the build log reports" },
+        @{ Name = "all"; Description = "Runs all the above actions" },
+        @{ Name = "help"; Description = "Displays this content" })
 
     Write-Host
     Write-Host "Usage: .\Make.ps1 [action]"
@@ -162,6 +164,18 @@ switch -wildcard ($action) {
     }
 
     "report" {
+        Report
+        break
+    }
+
+    "all" {
+        Clean
+        Build
+        Test "UnitTests"
+        Test "IntegrationTests"
+        CreateCoverageReport
+        Pack
+        Install
         Report
         break
     }
