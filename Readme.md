@@ -1,3 +1,9 @@
+<div align="center">
+
+[![CircleCI](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main.svg?style=shield&circle-token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
+
+</div>
+
 # Background
 
 I wanted to learn how to create a .NET tool. At the same time, I was looking for an easy way to extract errors and warnings from a .NET build log. Eventually, I ended up making this project.
