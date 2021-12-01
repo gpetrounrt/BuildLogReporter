@@ -12,6 +12,7 @@ Param(
         "install",
         "report",
         "all",
+        "upload-badges",
         "help")]
     [string] $action = "")
 
@@ -26,9 +27,11 @@ Set-Variable ArtifactsPath -Option Constant -Value "$PSScriptRoot\artifacts" -Fo
 Set-Variable ReportPath -Option Constant -Value "$ArtifactsPath\Report" -Force -ErrorAction SilentlyContinue
 Set-Variable BinlogPath -Option Constant -Value "$ArtifactsPath\Built\Release\BuildLogReporter\Output.binlog" -Force -ErrorAction SilentlyContinue
 Set-Variable TestCoveragePath -Option Constant -Value "$ArtifactsPath\Coverage" -Force -ErrorAction SilentlyContinue
+Set-Variable TestCoverageReportPath -Option Constant -Value "$TestCoveragePath\Report" -Force -ErrorAction SilentlyContinue
 Set-Variable TestCoverageResultsPath -Option Constant -Value "$TestCoveragePath\Results" -Force -ErrorAction SilentlyContinue
 Set-Variable TestSummaryPath -Option Constant -Value "$ArtifactsPath\TestSummary" -Force -ErrorAction SilentlyContinue
 Set-Variable ToolsPath -Option Constant -Value "$PSScriptRoot\tools" -Force -ErrorAction SilentlyContinue
+Set-Variable BadgesGistPath -Option Constant -Value "$PSScriptRoot\repos\BadgesGist" -Force -ErrorAction SilentlyContinue
 
 function DeleteDirectory([string] $directoryPath) {
     if (Test-Path $directoryPath) {
@@ -68,7 +71,7 @@ function CreateCoverageReport() {
 
     & "$ToolsPath\reportgenerator.exe" `
         -reports:"$TestCoverageResultsPath\**\*.xml" `
-        -targetdir:"$TestCoveragePath\Report" `
+        -targetdir:"$TestCoverageReportPath" `
         -reporttypes:"Badges;Html;MarkdownSummary" `
         -title:"Build Log Reporter"
 }
@@ -106,6 +109,32 @@ function Report() {
     }
 }
 
+function UploadBadges() {
+    $branchName = git rev-parse --abbrev-ref HEAD
+    if ($branchName -ne "main") {
+        Write-Host "Badges are only uploaded when building the main branch."
+        return
+    }
+
+    if ($null -eq $env:GITHUB_GIST_TOKEN) {
+        Write-Host "GITHUB_GIST_TOKEN environment variable is not defined."
+        return
+    }
+
+    $gistUrl = "https://" + $env:GITHUB_GIST_TOKEN + "@gist.github.com/12e53399727fc04da47e22494e6e2681.git"
+
+    if (!(Test-Path "$BadgesGistPath")) {
+        & git clone $gistUrl repos/BadgesGist
+    }
+
+    Copy-Item "$TestCoverageReportPath\badge_combined.svg" "$BadgesGistPath\CoverageBadge.svg"
+    Copy-Item "$ReportPath\BuildLogReport.svg" "$BadgesGistPath\BuildLogBadge.svg"
+
+    & git -C "$BadgesGistPath" add .
+    & git -C "$BadgesGistPath" commit --amend --no-edit
+    & git -C "$BadgesGistPath" push $gistUrl master -f
+}
+
 function DisplayHelp() {
 
     $availableActions = @(
@@ -118,6 +147,7 @@ function DisplayHelp() {
         @{ Name = "install"; Description = "Installs the NuGet package" },
         @{ Name = "report"; Description = "Generates the build log reports" },
         @{ Name = "all"; Description = "Runs all the above actions" },
+        @{ Name = "upload-badges"; Description = "Uploads badges to Gist" },
         @{ Name = "help"; Description = "Displays this content" })
 
     Write-Host
@@ -177,6 +207,11 @@ switch -wildcard ($action) {
         Pack
         Install
         Report
+        break
+    }
+
+    "upload-badges" {
+        UploadBadges
         break
     }
 
