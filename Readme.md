@@ -1,6 +1,8 @@
 <div align="center">
 
-[![CircleCI](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main.svg?style=shield&circle-token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
+[![Build](https://gist.github.com/gpetrounrt/12e53399727fc04da47e22494e6e2681/raw/BuildLogBadge.svg)](https://circleci.com/api/v1.1/project/github/gpetrounrt/buildlogreporter/latest/artifacts/0/Users/circleci/project/artifacts/Report/BuildLogReport.htm?branch=main)
+[![Coverage](https://gist.github.com/gpetrounrt/12e53399727fc04da47e22494e6e2681/raw/CoverageBadge.svg)](https://circleci.com/api/v1.1/project/github/gpetrounrt/buildlogreporter/latest/artifacts/0/Users/circleci/project/artifacts/Coverage/Report/index.htm?branch=main)
+[![CircleCI](https://img.shields.io/circleci/build/gh/gpetrounrt/BuildLogReporter/main?label=circleci&style=plastic&token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
 
 </div>
 

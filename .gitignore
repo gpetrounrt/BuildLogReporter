@@ -1,6 +1,7 @@
 .vs/
 
 artifacts/
+repos/
 tools/
 
 launchSettings.json

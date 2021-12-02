@@ -65,6 +65,9 @@ jobs:
           command: ./Make.ps1 report
       - store_artifacts:
           path: C:\Users\circleci\project\artifacts\Report
+      - run:
+          name: "Upload badges"
+          command: ./Make.ps1 upload-badges
 
 workflows:
   continous:
