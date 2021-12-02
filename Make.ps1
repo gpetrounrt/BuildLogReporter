@@ -125,6 +125,8 @@ function UploadBadges() {
 
     if (!(Test-Path "$BadgesGistPath")) {
         & git clone $gistUrl repos/BadgesGist
+        & git -C "$BadgesGistPath" config user.email "circleci@circleci.com"
+        & git -C "$BadgesGistPath" config user.name "CircleCI"
     }
 
     Copy-Item "$TestCoverageReportPath\badge_combined.svg" "$BadgesGistPath\CoverageBadge.svg"
