@@ -55,6 +55,8 @@ jobs:
       - run:
           name: "Pack NuGet package"
           command: ./Make.ps1 pack
+      - store_artifacts:
+          path: C:\Users\circleci\project\artifacts\Package
       - run:
           name: "Install NuGet package"
           command: ./Make.ps1 install
