@@ -39,6 +39,16 @@ function DeleteDirectory([string] $directoryPath) {
     }
 }
 
+function IsToolInstalled([string] $toolName) {
+    $isToolInstalled = $false
+    if (Test-Path $ToolsPath) {
+        $tools = & dotnet tool list --tool-path $ToolsPath
+        $isToolInstalled = $tools -Like "*$toolName*"
+    }
+
+    return $isToolInstalled
+}
+
 function Clean() {
     & dotnet clean $SolutionPath --configuration Release
 
@@ -59,12 +69,7 @@ function Test([string] $testType) {
 }
 
 function CreateCoverageReport() {
-    $isReportGeneratorInstalled = $false
-    if (Test-Path $ToolsPath) {
-        $tools = dotnet tool list --tool-path $ToolsPath
-        $isReportGeneratorInstalled = $tools -Like '*dotnet-reportgenerator-globaltool*'
-    }
-
+    $isReportGeneratorInstalled = IsToolInstalled "dotnet-reportgenerator-globaltool"
     if (!$isReportGeneratorInstalled) {
         dotnet tool install --tool-path $ToolsPath dotnet-reportgenerator-globaltool
     }
@@ -81,12 +86,7 @@ function Pack() {
 }
 
 function Install() {
-    $isBuildLogReporterInstalled = $false
-    if (Test-Path $ToolsPath) {
-        $tools = dotnet tool list --tool-path $ToolsPath
-        $isBuildLogReporterInstalled = $tools -Like '*build-log-reporter*'
-    }
-
+    $isBuildLogReporterInstalled = IsToolInstalled "build-log-reporter"
     if ($isBuildLogReporterInstalled) {
         & dotnet tool uninstall --tool-path $ToolsPath BuildLogReporter
     }
