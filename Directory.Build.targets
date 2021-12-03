@@ -1,0 +1,26 @@
+﻿<Project>
+
+  <Target Condition=" '$(IsTestProject)' == 'false' And '$(IsTestSupportProject)' == 'false' "
+          Name="SetAssemblyInfoVersions"
+          AfterTargets="PrepareForBuild"
+          BeforeTargets="GenerateAssemblyInfo;GetPackageMetadata;GenerateNuspec;Pack"
+          DependsOnTargets="GitVersion;AddSourceRevisionToInformationalVersion">
+
+    <PropertyGroup>
+      <Version>$(MajorMinorPatchVersion)</Version>
+      <FileVersion>$(Version).$(GitCommits)</FileVersion>
+      <InformationalVersion>$(Version)-g$(GitCommit)</InformationalVersion>
+
+      <!-- When building from a non-release branch. -->
+      <PackageVersion>$(Version)-pre.$(GitCommits).g$(GitCommit)</PackageVersion>
+
+      <!-- When building from a release branch. -->
+      <PackageVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitBranch), '^\d+\.\d+\.x$')) ">$(MajorMinorPatchVersion)-pre.$(GitCommits)</PackageVersion>
+
+      <!-- When building from a release branch and tag. -->
+      <PackageVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitBranch), '^\d+\.\d+\.x$')) And $([System.Text.RegularExpressions.Regex]::IsMatch($(GitTag), '^\d+\.\d+\.\d+$')) ">$(MajorMinorPatchVersion)</PackageVersion>
+    </PropertyGroup>
+
+  </Target>
+
+</Project>
