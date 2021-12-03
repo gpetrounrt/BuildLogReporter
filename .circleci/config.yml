@@ -73,3 +73,11 @@ workflows:
   continous:
     jobs:
       - make
+  release:
+    jobs:
+      - make:
+          filters:
+            branches:
+              only: /^\d+\.\d+\.x$/
+            tags:
+              only: /^\d+\.\d+\.\d+$/
