@@ -72,4 +72,7 @@ jobs:
 workflows:
   continous:
     jobs:
-      - make
+      - make:
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
