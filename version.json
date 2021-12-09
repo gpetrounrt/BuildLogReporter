@@ -4,6 +4,9 @@
   "assemblyVersion": {
     "precision": "revision"
   },
+  "nuGetPackageVersion": {
+    "semVer": 2
+  },
   "publicReleaseRefSpec": [
     "^refs/tags/\\d+\\.\\d+.\\d+"
   ]
