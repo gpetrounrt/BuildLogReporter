@@ -8,6 +8,6 @@
     "semVer": 2
   },
   "publicReleaseRefSpec": [
-    "^refs/tags/\\d+\\.\\d+.\\d+"
+    "^refs/heads/\\d+\\.\\d+\\.x$"
   ]
 }
