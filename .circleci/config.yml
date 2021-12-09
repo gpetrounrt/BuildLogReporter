@@ -69,10 +69,15 @@ jobs:
           name: "Upload badges"
           command: ./Make.ps1 upload-badges
 
+# Test
 workflows:
   continous:
     jobs:
       - make:
           filters:
+            branches:
+              only:
+                - /^main$/
+                - /^\d+\.\d+\.x$/
             tags:
               only: /^\d+\.\d+\.\d+$/
