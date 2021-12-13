@@ -18,7 +18,7 @@ At minimum, you will need two arguments:
 2. The reportPath, which corresponds to the path of report directory. If it does not exist, the tool will attempt to create it.
 
 ```
-BuildLogReporter [options] <logPath> <reportPath>
+build-log-reporter [options] <logPath> <reportPath>
 ```
 
 There are a few options that you can set before the two arguments:
