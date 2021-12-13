@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <PackageId>build-log-reporter</PackageId>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>build-log-reporter</ToolCommandName>
     <PackageOutputPath>../../artifacts/Package</PackageOutputPath>
