@@ -24,7 +24,7 @@ end_of_line = crlf
 insert_final_newline = true
 
 ## Project, JSON and properties files ##
-[*.{csproj,json,props}]
+[*.{csproj,json,props,targets}]
 
 # Encoding
 charset = utf-8-bom

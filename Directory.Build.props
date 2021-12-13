@@ -1,10 +1,11 @@
-<Project>
+﻿<Project>
 
   <!-- Properties used by all projects. -->
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
     <Features>strict</Features>
     <ImplicitUsings>enable</ImplicitUsings>
+    <MajorMinorPatchVersion>0.9.0</MajorMinorPatchVersion>
     <Authors>Georgios Petrou</Authors>
     <Company>$(Authors)</Company>
     <Product>Build Log Reporter</Product>
@@ -20,7 +21,7 @@
     <IsTestProject>false</IsTestProject>
     <IsTestProject Condition="$(MSBuildProjectName.EndsWith('Tests'))">true</IsTestProject>
     <IsTestSupportProject>false</IsTestSupportProject>
-    <IsTestSupportProject Condition="$(MSBuildProjectName.StartsWith('ProjectWith'))">true</IsTestSupportProject>
+    <IsTestSupportProject Condition="$(MSBuildProjectName.StartsWith('ProjectWith')) Or $(MSBuildProjectName.Contains('Tests.Common'))">true</IsTestSupportProject>
   </PropertyGroup>
 
   <!-- Properties used by all projects except the test support ones. -->
@@ -38,9 +39,7 @@
   <ItemGroup Condition=" '$(IsTestSupportProject)' == 'false' ">
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.NetAnalyzers.globalconfig" />
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.StyleCop.globalconfig" />
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.244">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="GitInfo" Version="2.2.0" />
     <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.354">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
