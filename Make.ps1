@@ -86,15 +86,16 @@ function Pack() {
 }
 
 function Install() {
-    $isBuildLogReporterInstalled = IsToolInstalled "build-log-reporter"
+    $packageId = "build-log-reporter"
+    $isBuildLogReporterInstalled = IsToolInstalled $packageId
     if ($isBuildLogReporterInstalled) {
-        & dotnet tool uninstall --tool-path $ToolsPath BuildLogReporter
+        & dotnet tool uninstall --tool-path $ToolsPath $packageId
     }
 
     & dotnet tool install --add-source "$ArtifactsPath\Package" `
         --tool-path $ToolsPath `
         --prerelease `
-        BuildLogReporter
+        $packageId
 }
 
 function Report() {
