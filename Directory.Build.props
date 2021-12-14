@@ -5,8 +5,8 @@
     <LangVersion>10.0</LangVersion>
     <Features>strict</Features>
     <ImplicitUsings>enable</ImplicitUsings>
-    <MajorMinorPatchVersion>0.9.0</MajorMinorPatchVersion>
     <GitDefaultBranch>main</GitDefaultBranch>
+    <GitVersionFile>Version.txt</GitVersionFile>
     <Authors>Georgios Petrou</Authors>
     <Company>$(Authors)</Company>
     <Product>Build Log Reporter</Product>
