@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		License.md = License.md
 		Make.ps1 = Make.ps1
 		Readme.md = Readme.md
+		Version.txt = Version.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DD01E141-B029-4701-A854-16D40B2D2BB2}"
