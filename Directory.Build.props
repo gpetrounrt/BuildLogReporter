@@ -25,6 +25,10 @@
     <IsTestSupportProject Condition="$(MSBuildProjectName.StartsWith('ProjectWith')) Or $(MSBuildProjectName.Contains('Tests.Common'))">true</IsTestSupportProject>
   </PropertyGroup>
 
+  <!-- To be redefined by GitInfo after restore. -->
+  <Target Condition=" '$(IsTestProject)' == 'false' And '$(IsTestSupportProject)' == 'false' "
+          Name="GitVersion" />
+
   <!-- Properties used by all projects except the test support ones. -->
   <PropertyGroup Condition=" '$(IsTestSupportProject)' == 'false' ">
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
