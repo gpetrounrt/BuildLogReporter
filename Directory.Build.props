@@ -10,7 +10,7 @@
     <Authors>Georgios Petrou</Authors>
     <Company>$(Authors)</Company>
     <Product>Build Log Reporter</Product>
-    <Copyright>Copyright © 2021 Georgios Petrou</Copyright>
+    <Copyright>Copyright © 2021 - $([System.DateTime]::Now.Year.ToString()) Georgios Petrou</Copyright>
     <IntermediatePath>$(MSBuildThisFileDirectory)artifacts\Intermediate</IntermediatePath>
     <BuiltPath>$(MSBuildThisFileDirectory)artifacts\Built\</BuiltPath>
     <TargetFrameworkMonikerAssemblyAttributesFileClean>false</TargetFrameworkMonikerAssemblyAttributesFileClean>
