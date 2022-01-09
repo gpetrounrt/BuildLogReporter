@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.39" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.47" />
   </ItemGroup>
