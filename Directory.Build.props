@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GitDefaultBranch>main</GitDefaultBranch>
     <GitVersionFile>Version.txt</GitVersionFile>
+    <GitBaseVersionRegex>^\d+\.\d+\.\d+$</GitBaseVersionRegex>
+    <GitTagRegex>^\d+\.\d+\.\d+$</GitTagRegex>
     <Authors>Georgios Petrou</Authors>
     <Company>$(Authors)</Company>
     <Product>Build Log Reporter</Product>
