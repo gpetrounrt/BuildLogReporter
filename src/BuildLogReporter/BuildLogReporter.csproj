@@ -8,12 +8,17 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>build-log-reporter</ToolCommandName>
     <PackageOutputPath>../../artifacts/Package</PackageOutputPath>
+    <PackageLicenseFile>License.md</PackageLicenseFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(CI)' == 'true' ">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../License.md" Pack="true" PackagePath="License.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
