@@ -275,15 +275,17 @@ namespace BuildLogReporter.Execution
                 return null;
             });
 
+            var verboseOption = new Option<bool>(
+                    new[] { "--verbose", "-v" },
+                    () => false,
+                    "Whether to use verbose output");
+
             _rootCommand = new RootCommand
             {
                 logPathArgument,
                 reportPathArgument,
                 reportTypesOption,
-                new Option<bool>(
-                    new[] { "--verbose", "-v" },
-                    () => false,
-                    "Whether to use verbose output")
+                verboseOption
             };
 
             var versionAsString = Assembly.GetExecutingAssembly()
