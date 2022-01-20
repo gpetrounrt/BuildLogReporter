@@ -2,7 +2,10 @@
 
 [![Build](https://gist.github.com/gpetrounrt/12e53399727fc04da47e22494e6e2681/raw/BuildLogBadge.svg)](https://circleci.com/api/v1.1/project/github/gpetrounrt/buildlogreporter/latest/artifacts/0/Users/circleci/project/artifacts/Report/BuildLogReport.htm?branch=main)
 [![Coverage](https://gist.github.com/gpetrounrt/12e53399727fc04da47e22494e6e2681/raw/CoverageBadge.svg)](https://circleci.com/api/v1.1/project/github/gpetrounrt/buildlogreporter/latest/artifacts/0/Users/circleci/project/artifacts/Coverage/Report/index.htm?branch=main)
-[![CircleCI](https://img.shields.io/circleci/build/gh/gpetrounrt/BuildLogReporter/main?label=circleci&style=plastic&token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
+[![CircleCI](https://img.shields.io/circleci/build/gh/gpetrounrt/BuildLogReporter/main?label=circleci&logo=circleci&style=plastic&token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
+
+[![NuGet](https://img.shields.io/nuget/v/build-log-reporter?logo=nuget&style=plastic)](https://www.nuget.org/packages/build-log-reporter)
+[![NuGet Prerelease](https://img.shields.io/nuget/vpre/build-log-reporter?logo=nuget&style=plastic)](https://www.nuget.org/packages/build-log-reporter)
 
 </div>
 
