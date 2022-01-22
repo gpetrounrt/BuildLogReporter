@@ -5,7 +5,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/gh/gpetrounrt/BuildLogReporter/main?label=circleci&logo=circleci&style=plastic&token=8b571c9d36c58f851da996c00b86a356312ab969)](https://circleci.com/gh/gpetrounrt/BuildLogReporter/tree/main)
 
 [![NuGet](https://img.shields.io/nuget/v/build-log-reporter?logo=nuget&style=plastic)](https://www.nuget.org/packages/build-log-reporter)
-[![NuGet Prerelease](https://img.shields.io/nuget/vpre/build-log-reporter?logo=nuget&style=plastic)](https://www.nuget.org/packages/build-log-reporter)
+[![NuGet Prerelease](https://img.shields.io/nuget/vpre/build-log-reporter?label=nuget-pre&logo=nuget&style=plastic)](https://www.nuget.org/packages/build-log-reporter)
 
 </div>
 
