@@ -10,7 +10,7 @@
       <AssemblyVersion>$(GitBaseVersion)</AssemblyVersion>
       <FileVersion>$(AssemblyVersion).$(GitCommits)</FileVersion>
 
-      <!-- When building from a non-release branch. -->
+      <!-- When building from a non-release branch or tag. -->
       <InformationalVersion>$(AssemblyVersion)-pre.$(GitCommits).g$(GitCommit)</InformationalVersion>
       <PackageVersion>$(InformationalVersion)</PackageVersion>
 
@@ -18,8 +18,9 @@
       <InformationalVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitBranch), '^\d+\.\d+\.x$')) ">$(AssemblyVersion).$(GitCommits)-g$(GitCommit)</InformationalVersion>
       <PackageVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitBranch), '^\d+\.\d+\.x$')) ">$(AssemblyVersion)-pre.$(GitCommits)</PackageVersion>
 
-      <!-- When building from a release branch and tag. -->
-      <PackageVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitBranch), '^\d+\.\d+\.x$')) And $([System.Text.RegularExpressions.Regex]::IsMatch($(GitTag), '^\d+\.\d+\.\d+$')) ">$(AssemblyVersion)</PackageVersion>
+      <!-- When building from a release tag. -->
+      <InformationalVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitTag), '^\d+\.\d+\.\d+$')) ">$(AssemblyVersion).$(GitCommits)-g$(GitCommit)</InformationalVersion>
+      <PackageVersion Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(GitTag), '^\d+\.\d+\.\d+$')) ">$(AssemblyVersion)</PackageVersion>
     </PropertyGroup>
 
   </Target>
