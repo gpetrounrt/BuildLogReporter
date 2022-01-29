@@ -8,3 +8,5 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "Microsoft.NET.Test.Sdk"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
