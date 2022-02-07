@@ -56,7 +56,7 @@
   <!-- Items used only by the test projects that are not for test support. -->
   <ItemGroup Condition=" '$(IsTestProject)' == 'true' And '$(IsTestSupportProject)' == 'false' ">
     <EditorConfigFiles Include="$(MSBuildThisFileDirectory)tests\CodeAnalysis.NetAnalyzers.globalconfig" />
-    <PackageReference Include="coverlet.collector" Version="3.1.1">
+    <PackageReference Include="coverlet.collector" Version="3.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
