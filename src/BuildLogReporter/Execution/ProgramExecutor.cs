@@ -1,5 +1,4 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.IO.Abstractions;
 using System.Reflection;
@@ -205,22 +204,22 @@ namespace BuildLogReporter.Execution
                 var logPath = argumentResult.GetValueOrDefault<string>();
                 if (string.IsNullOrWhiteSpace(logPath))
                 {
-                    return $"'{argumentResult.Argument.Name}' cannot be null or empty.";
+                    argumentResult.ErrorMessage = $"'{argumentResult.Argument.Name}' cannot be null or empty.";
+                    return;
                 }
 
                 bool isBinaryLog = logPath.EndsWith(".binlog", StringComparison.OrdinalIgnoreCase);
                 bool isTextLog = logPath.EndsWith(".log", StringComparison.OrdinalIgnoreCase);
                 if (!isBinaryLog && !isTextLog)
                 {
-                    return $"'{argumentResult.Argument.Name}' has an unsupported file extension value of '{Path.GetExtension(logPath)}'.";
+                    argumentResult.ErrorMessage = $"'{argumentResult.Argument.Name}' has an unsupported file extension value of '{Path.GetExtension(logPath)}'.";
+                    return;
                 }
 
                 if (!_fileSystem.File.Exists(logPath))
                 {
-                    return $"'{logPath}' does not exist.";
+                    argumentResult.ErrorMessage = $"'{logPath}' does not exist.";
                 }
-
-                return null;
             });
 
             var reportPathArgument = new Argument<string>("reportPath", "The path of the report files");
@@ -229,15 +228,14 @@ namespace BuildLogReporter.Execution
                 var reportPath = argumentResult.GetValueOrDefault<string>();
                 if (string.IsNullOrWhiteSpace(reportPath))
                 {
-                    return $"'{argumentResult.Argument.Name}' cannot be null or empty.";
+                    argumentResult.ErrorMessage = $"'{argumentResult.Argument.Name}' cannot be null or empty.";
+                    return;
                 }
 
                 if (reportPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
                 {
-                    return $"'{reportPath}' contains invalid characters.";
+                    argumentResult.ErrorMessage = $"'{reportPath}' contains invalid characters.";
                 }
-
-                return null;
             });
 
             var reportTypesOption = new Option<string>(
@@ -249,7 +247,8 @@ namespace BuildLogReporter.Execution
                 var reportTypes = optionResult.GetValueOrDefault<string>();
                 if (string.IsNullOrWhiteSpace(reportTypes))
                 {
-                    return $"'{optionResult.Option.Name}' cannot be null or empty.";
+                    optionResult.ErrorMessage = $"'{optionResult.Option.Name}' cannot be null or empty.";
+                    return;
                 }
 
                 var reportTypesAsArray = reportTypes.Split(';');
@@ -257,7 +256,8 @@ namespace BuildLogReporter.Execution
                 {
                     if (!_availableReportTypes.Contains(reportType))
                     {
-                        return $"'{reportType}' is an invalid value.{Environment.NewLine}Possible values: {string.Join(", ", _availableReportTypes)}";
+                        optionResult.ErrorMessage = $"'{reportType}' is an invalid value.{Environment.NewLine}Possible values: {string.Join(", ", _availableReportTypes)}";
+                        return;
                     }
                 }
 
@@ -266,13 +266,12 @@ namespace BuildLogReporter.Execution
                 {
                     if (uniqueReportTypes.Contains(reportType))
                     {
-                        return $"'{reportType}' is already selected in '{optionResult.Option.Name}'.";
+                        optionResult.ErrorMessage = $"'{reportType}' is already selected in '{optionResult.Option.Name}'.";
+                        return;
                     }
 
                     uniqueReportTypes.Add(reportType);
                 }
-
-                return null;
             });
 
             var verboseOption = new Option<bool>(
@@ -294,7 +293,15 @@ namespace BuildLogReporter.Execution
 
             _rootCommand.Description = $"Build Log Reporter {versionAsString}";
 
-            _rootCommand.Handler = CommandHandler.Create<string, string, string, bool>(ProcessFile);
+            _rootCommand.SetHandler(
+                (string logPath, string reportPath, string reportTypes, bool verbose) =>
+                {
+                    return Task.FromResult(ProcessFile(logPath, reportPath, reportTypes, verbose));
+                },
+                logPathArgument,
+                reportPathArgument,
+                reportTypesOption,
+                verboseOption);
         }
 
         public ProgramExecutor()
