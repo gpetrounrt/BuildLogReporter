@@ -71,7 +71,7 @@ namespace BuildLogReporter.Reporters
                     font = SystemFonts.CreateFont(possibleFont, 11, FontStyle.Regular);
                     break;
                 }
-                catch (SixLabors.Fonts.Exceptions.FontFamilyNotFoundException)
+                catch (FontFamilyNotFoundException)
                 {
                 }
             }
@@ -81,8 +81,8 @@ namespace BuildLogReporter.Reporters
                 throw new InvalidOperationException("Could not initialize font.");
             }
 
-            var buildRectangle = TextMeasurer.Measure(LeftSideText, new RendererOptions(font));
-            var errorsAndWarningsRectangle = TextMeasurer.Measure(errorsAndWarningsText, new RendererOptions(font));
+            var buildRectangle = TextMeasurer.Measure(LeftSideText, new TextOptions(font));
+            var errorsAndWarningsRectangle = TextMeasurer.Measure(errorsAndWarningsText, new TextOptions(font));
 
             var buildRectangleWidth = buildRectangle.Width + 3;
             var errorsAndWarningsRectangleWidth = errorsAndWarningsRectangle.Width + 3;

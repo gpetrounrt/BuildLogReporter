@@ -55,7 +55,7 @@ namespace BuildLogReporter.UnitTests.Reporters
 
             // Assert
             reportAsString.Should().Contain($@"{expectedErrorCount} error, {expectedWarningCount} warnings");
-            reportAsString.Should().Contain($@"<path fill=""#E05D44"" d=""M31.392578 0h109.063965v20H31.392578z"" />");
+            reportAsString.Should().Contain($@"<path fill=""#E05D44"" d=""M31.392578 0h109.06396v20H31.392578z"" />");
             exception.Should().BeNull();
         }
     }
