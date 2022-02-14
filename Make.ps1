@@ -33,6 +33,14 @@ Set-Variable TestSummaryPath -Option Constant -Value "$ArtifactsPath\TestSummary
 Set-Variable ToolsPath -Option Constant -Value "$PSScriptRoot\tools" -Force -ErrorAction SilentlyContinue
 Set-Variable BadgesGistPath -Option Constant -Value "$PSScriptRoot\repos\BadgesGist" -Force -ErrorAction SilentlyContinue
 
+function Exec([ScriptBlock] $cmd) {
+    & $cmd
+
+    if ($LastExitCode -ne 0) {
+        throw "Error executing command: {0}" -f $cmd
+    }
+}
+
 function DeleteDirectory([string] $directoryPath) {
     if (Test-Path $directoryPath) {
         Remove-Item $directoryPath -Force -Recurse
@@ -50,22 +58,24 @@ function IsToolInstalled([string] $toolName) {
 }
 
 function Clean() {
-    & dotnet clean $SolutionPath --configuration Release
+    Exec { dotnet clean $SolutionPath --configuration Release }
 
     DeleteDirectory $ArtifactsPath
 }
 
 function Build() {
-    & dotnet build $SolutionPath --configuration Release -bl:$BinlogPath
+    Exec { dotnet build $SolutionPath --configuration Release -bl:$BinlogPath }
 }
 
 function Test([string] $testType) {
-    & dotnet test --configuration Release `
-        --no-build `
-        --filter FullyQualifiedName~$testType `
-        --collect:"XPlat Code Coverage" `
-        --logger "junit;LogFilePath=$TestSummaryPath/{assembly}.xml" `
-        --results-directory "$TestCoverageResultsPath"
+    Exec {
+        dotnet test --configuration Release `
+            --no-build `
+            --filter FullyQualifiedName~$testType `
+            --collect:"XPlat Code Coverage" `
+            --logger "junit;LogFilePath=$TestSummaryPath/{assembly}.xml" `
+            --results-directory "$TestCoverageResultsPath"
+    }
 }
 
 function CreateCoverageReport() {
@@ -74,28 +84,32 @@ function CreateCoverageReport() {
         dotnet tool install --tool-path $ToolsPath dotnet-reportgenerator-globaltool
     }
 
-    & "$ToolsPath\reportgenerator.exe" `
-        -reports:"$TestCoverageResultsPath\**\*.xml" `
-        -targetdir:"$TestCoverageReportPath" `
-        -reporttypes:"Badges;Html;MarkdownSummary" `
-        -title:"Build Log Reporter"
+    Exec {
+        & "$ToolsPath\reportgenerator.exe" `
+            -reports:"$TestCoverageResultsPath\**\*.xml" `
+            -targetdir:"$TestCoverageReportPath" `
+            -reporttypes:"Badges;Html;MarkdownSummary" `
+            -title:"Build Log Reporter"
+    }
 }
 
 function Pack() {
-    & dotnet pack $SolutionPath --configuration Release --no-build
+    Exec { dotnet pack $SolutionPath --configuration Release --no-build }
 }
 
 function Install() {
     $packageId = "build-log-reporter"
     $isBuildLogReporterInstalled = IsToolInstalled $packageId
     if ($isBuildLogReporterInstalled) {
-        & dotnet tool uninstall --tool-path $ToolsPath $packageId
+        Exec { dotnet tool uninstall --tool-path $ToolsPath $packageId }
     }
 
-    & dotnet tool install --add-source "$ArtifactsPath\Package" `
-        --tool-path $ToolsPath `
-        --prerelease `
-        $packageId
+    Exec {
+        dotnet tool install --add-source "$ArtifactsPath\Package" `
+            --tool-path $ToolsPath `
+            --prerelease `
+            $packageId
+    }
 }
 
 function Report() {
