@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
-    <PackageReference Include="Moq" Version="4.17.1" />
+    <PackageReference Include="Moq" Version="4.17.2" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.47" />
   </ItemGroup>
 
