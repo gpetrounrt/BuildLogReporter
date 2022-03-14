@@ -17,7 +17,7 @@ namespace BuildLogReporter.UnitTests.Diagnostics
             executionTimer.Measure(() => { });
 
             // Assert
-            executionTimer.TotalMilliseconds.Should().BeGreaterThan(0);
+            executionTimer.TotalMilliseconds.Should().BePositive();
         }
 
         [Theory]
